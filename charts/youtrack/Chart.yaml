@@ -1,0 +1,24 @@
+apiVersion: v2
+name: youtrack
+description: A Helm chart for deploying Youtrack on Kubernetes
+type: application
+icon: https://raw.githubusercontent.com/TWENTY-20/helm-charts/main/youtrack/icon.png
+version: 1.0.12
+
+keywords:
+  - youtrack
+  - yt
+  - jetbrains
+  - twenty20
+  - k8s
+  - kubernetes
+
+maintainers:
+  - name: twenty20
+    url: https://twenty20.de
+    email: it-factory@twenty20.de
+
+home: https://twenty20.de
+
+sources:
+  - https://github.com/TWENTY-20/helm-charts/tree/main/youtrack
