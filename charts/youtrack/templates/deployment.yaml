@@ -1,21 +1,27 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: {{ if .Values.fullnameOverride }}{{ .Values.fullnameOverride }}{{ else }}{{ .Values.nameOverride | default .Release.Name }}{{ end }}
+  name: {{ include "youtrack.fullname" . }}
   namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "youtrack.labels" . | nindent 4 }}
 spec:
+  replicas: {{ .Values.deployment.replicas }}
+  strategy:
+    type: {{ .Values.deployment.strategyType }}
   selector:
     matchLabels:
-      app: {{ .Values.nameOverride | default .Release.Name }}
-  serviceName: {{ .Values.service.name }}
+      {{- include "youtrack.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ .Values.nameOverride | default .Release.Name }}
+        {{- include "youtrack.selectorLabels" . | nindent 8 }}
+      {{- if .Values.podAnnotations }}
       annotations:
         {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
+      {{- end }}
     spec:
       volumes:
         - name: {{ .Values.persistence.data.name }}
@@ -45,7 +51,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
-        - name: init-{{ if .Values.fullnameOverride }}{{ .Values.fullnameOverride }}{{ else }}{{ .Values.nameOverride | default .Release.Name }}{{ end }}
+        - name: init-{{ include "youtrack.fullname" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           securityContext:
@@ -59,11 +65,20 @@ spec:
               mountPath: /opt/youtrack/logs
             - name: {{ .Values.persistence.backups.name }}
               mountPath: /opt/youtrack/backups
+          {{- with .Values.initContainerResources }}
           resources:
-            {{- toYaml .Values.initContainerResources | nindent 12 }}
+            {{- if or ((index . "limits" | default dict).cpu | default false) ((index . "limits" | default dict).memory | default false) }}
+            limits:
+              {{- toYaml .limits | nindent 14 }}
+            {{- end }}
+            {{- if or ((index . "requests" | default dict).cpu | default false) ((index . "requests" | default dict).memory | default false) }}
+            requests:
+              {{- toYaml .requests | nindent 14 }}
+            {{- end }}
+          {{- end }}
           args: ["configure", "--base-url={{ .Values.config.baseUrl }}"]
       containers:
-        - name: {{ if .Values.fullnameOverride }}{{ .Values.fullnameOverride }}{{ else }}{{ .Values.nameOverride | default .Release.Name }}{{ end }}
+        - name: {{ include "youtrack.fullname" . }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -89,8 +104,17 @@ spec:
           {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- with .Values.resources }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- if or ((index . "limits" | default dict).cpu | default false) ((index . "limits" | default dict).memory | default false) }}
+            limits:
+              {{- toYaml .limits | nindent 14 }}
+            {{- end }}
+            {{- if or ((index . "requests" | default dict).cpu | default false) ((index . "requests" | default dict).memory | default false) }}
+            requests:
+              {{- toYaml .requests | nindent 14 }}
+            {{- end }}
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

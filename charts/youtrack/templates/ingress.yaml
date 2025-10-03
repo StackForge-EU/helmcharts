@@ -4,6 +4,8 @@ kind: Ingress
 metadata:
   name: {{ .Values.ingress.name }}
   namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "youtrack.labels" . | nindent 4 }}
   annotations:
     {{- range $key, $value := .Values.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
@@ -21,7 +23,7 @@ spec:
                 port:
                   number: {{ .Values.service.port }}
   tls:
-    - secretName: {{ if .Values.fullnameOverride }}{{ .Values.fullnameOverride }}{{ else }}{{ .Values.nameOverride | default .Release.Name }}{{ end }}-letsencrypt-cert
+    - secretName: {{ include "youtrack.fullname" . }}-letsencrypt-cert
       hosts:
         - {{ .Values.config.baseUrl | trimPrefix "https://" | trimPrefix "http://" }}
 {{- end }}

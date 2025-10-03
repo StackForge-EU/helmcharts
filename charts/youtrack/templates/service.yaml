@@ -4,9 +4,11 @@ kind: Service
 metadata:
   name: {{ .Values.service.name }}
   namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "youtrack.labels" . | nindent 4 }}
 spec:
   selector:
-    app: {{ if .Values.fullnameOverride }}{{ .Values.fullnameOverride }}{{ else }}{{ .Values.nameOverride | default .Release.Name }}{{ end }}
+    {{- include "youtrack.selectorLabels" . | nindent 4 }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.name }}

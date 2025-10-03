@@ -1,6 +1,14 @@
 # ☸️ YouTrack Helm Chart
 Fork of [TWENTY-20 YouTrack Helm Chart](https://github.com/TWENTY-20/helm-charts/tree/main/youtrack)
 
+Changes to Twenty-20 original:
+- Changed to use Deployment instead of StatefulSet
+- REmoved StorageClass name to allow default StorageClass of the cluster to be used
+- Reduced default memory requests/limits according to JetBrains YouTrack documentation
+- helpers.tpl added for variable management
+- global settings in values.yaml for persistence
+- Check git history for all changes
+
 This Helm chart deploys [JetBrains YouTrack](https://www.jetbrains.com/youtrack)
 
 [![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=%23c3bc0e&color=grey)](https://github.com/TWENTY-20/helm-charts)
