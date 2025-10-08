@@ -1,0 +1,24 @@
+apiVersion: v2
+name: youtrack
+description: A Helm chart for deploying Youtrack on Kubernetes
+type: application
+icon: https://raw.githubusercontent.com/StackForge-EU/helmcharts/main/charts/youtrack/icon.png
+version: 1.0.12
+
+keywords:
+  - youtrack
+  - yt
+  - jetbrains
+  - stackforge
+  - k8s
+  - kubernetes
+
+maintainers:
+  - name: StackForge
+    url: https://stack-forge.eu
+    email: charts@stack-forge.cloud
+
+home: https://stack-forge.eu
+
+sources:
+  - https://github.com/StackForge-EU/helmcharts/tree/main/charts/youtrack
