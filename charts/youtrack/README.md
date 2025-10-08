@@ -1,9 +1,11 @@
 # ☸️ YouTrack Helm Chart
 Fork of [TWENTY-20 YouTrack Helm Chart](https://github.com/TWENTY-20/helm-charts/tree/main/youtrack)
 
-Changes to Twenty-20 original:
+Maintained by [StackForge](https://stack-forge.eu)
+
+Changes from original:
 - Changed to use Deployment instead of StatefulSet
-- REmoved StorageClass name to allow default StorageClass of the cluster to be used
+- Removed StorageClass name to allow default StorageClass of the cluster to be used
 - Reduced default memory requests/limits according to JetBrains YouTrack documentation
 - helpers.tpl added for variable management
 - global settings in values.yaml for persistence
@@ -11,7 +13,7 @@ Changes to Twenty-20 original:
 
 This Helm chart deploys [JetBrains YouTrack](https://www.jetbrains.com/youtrack)
 
-[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=%23c3bc0e&color=grey)](https://github.com/TWENTY-20/helm-charts)
+[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=%23c3bc0e&color=grey)](https://github.com/StackForge-EU/helmcharts)
 
 ## 📝 Description
 This flexible and dynamic Helm chart deploys YouTrack on a Kubernetes cluster using the official Docker image.
@@ -167,23 +169,21 @@ http://youtrack.example.com:8080
 ---
 ## 📦 Installation
 ```bash
-helm repo add twenty20-helm-charts https://twenty-20.github.io/helm-charts
+helm repo add stackforge https://stackforge-eu.github.io/helmcharts
 ```
 ```bash
 helm repo update
 ```
 ```bash
-helm install youtrack twenty20-helm-charts/youtrack -f values.yaml
+helm install youtrack stackforge/youtrack -f values.yaml
 ```
 ---
 ## 🪪 License
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-green?style=for-the-badge&color=%23c3bc0e)](https://github.com/TWENTY-20/helm-charts/blob/main/youtrack/LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-green?style=for-the-badge&color=%23c3bc0e)](https://github.com/StackForge-EU/helmcharts/blob/main/charts/youtrack/LICENSE)
 
 YouTrack is a proprietary product developed by JetBrains and is subject to its own licensing terms.  For detailed information, please refer to the [YouTrack Server License Agreement](https://www.jetbrains.com/legal/docs/youtrack/license/)
 
 ---
-## 🌐 Social
-[![Facebook](https://img.shields.io/badge/facebook-%231877F2.svg?style=for-the-badge&logo=facebook)](https://www.facebook.com/twenty20.de/)
-[![Instagram](https://img.shields.io/badge/instagram-%23E4405F.svg?style=for-the-badge&logo=instagram)](https://www.instagram.com/we_are_twenty20/)
-[![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin)](https://de.linkedin.com/company/twenty-20-gmbh-&-co-kg)
-[![Xing](https://img.shields.io/badge/xing-%2300714F.svg?style=for-the-badge&logo=xing)](https://www.xing.com/pages/twenty-20gmbh-co-kg)
+## 🌐 Contact
+For support and maintenance information, please visit [StackForge](https://stack-forge.eu)
+
