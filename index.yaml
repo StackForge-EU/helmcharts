@@ -2,6 +2,30 @@ apiVersion: v1
 entries:
   youtrack:
   - apiVersion: v2
+    created: "2025-10-13T17:28:08.979251849Z"
+    description: A Helm chart for deploying Youtrack on Kubernetes
+    digest: f346d81e77c0802f5d67b79bf88104e8bf52a75ab8dcdce8a130d23d009bf630
+    home: https://stack-forge.eu
+    icon: https://raw.githubusercontent.com/StackForge-EU/helmcharts/main/charts/youtrack/icon.png
+    keywords:
+    - youtrack
+    - yt
+    - jetbrains
+    - stackforge
+    - k8s
+    - kubernetes
+    maintainers:
+    - email: charts@stack-forge.cloud
+      name: StackForge
+      url: https://stack-forge.eu
+    name: youtrack
+    sources:
+    - https://github.com/StackForge-EU/helmcharts/tree/main/charts/youtrack
+    type: application
+    urls:
+    - https://github.com/StackForge-EU/helmcharts/releases/download/youtrack-1.0.13/youtrack-1.0.13.tgz
+    version: 1.0.13
+  - apiVersion: v2
     created: "2025-10-08T20:07:06.730156519Z"
     description: A Helm chart for deploying Youtrack on Kubernetes
     digest: 5637282a995eaf2678dec547679a6c0f9b189e4ac4ba51911148b96a99b27dd6
@@ -25,4 +49,4 @@ entries:
     urls:
     - https://github.com/StackForge-EU/helmcharts/releases/download/youtrack-1.0.12/youtrack-1.0.12.tgz
     version: 1.0.12
-generated: "2025-10-08T20:07:06.730163602Z"
+generated: "2025-10-13T17:28:08.979264122Z"
