@@ -82,6 +82,9 @@ persistence:
     backupType: volumeStorage # ⚠️ Choose backupType: "objectStorage" or "volumeStorage", only one can be active at a time.
     name: youtrack-backup
 
+    storageClassName: ""
+    accessModes: []
+
     objectStorage: # This setting only effective when backupType is set to objectStorage
       storageClassName: ""
       obsVolumeType: STANDARD
@@ -92,17 +95,13 @@ persistence:
       persistentVolumeReclaimPolicy: Retain
       csiDriver: obs.csi.everest.io
       mountOptions: []
-      accessModes:
-        - ReadWriteMany
-      bucketId: your-bucked-id
-      accesKeySecretKeySecretName: your-secret
+      bucketId: your-bucket-id
+      accessKeySecretName: your-secret
       size: 100Gi
 
     volumeStorage: # This setting only effective when backupType is set to volumeStorage
-      storageClassName: ""
       storageType: SATA
       storageSize: 50Gi
-      accessModes: []
 
 # Configure your Youtrack
 config:

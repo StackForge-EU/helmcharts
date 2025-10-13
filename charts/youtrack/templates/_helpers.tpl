@@ -75,11 +75,15 @@ Conf storage class
 Backups storage class
 */}}
 {{- define "youtrack.backups.storageClass" -}}
-{{- if eq .Values.persistence.backups.backupType "volumeStorage" }}
+{{- if .Values.persistence.backups.storageClassName -}}
+{{- .Values.persistence.backups.storageClassName -}}
+{{- else if eq .Values.persistence.backups.backupType "volumeStorage" -}}
 {{- .Values.persistence.backups.volumeStorage.storageClassName | default .Values.global.storageClass | default "" -}}
-{{- else if eq .Values.persistence.backups.backupType "objectStorage" }}
+{{- else if eq .Values.persistence.backups.backupType "objectStorage" -}}
 {{- .Values.persistence.backups.objectStorage.storageClassName | default .Values.global.storageClass | default "" -}}
-{{- end }}
+{{- else -}}
+{{- .Values.global.storageClass | default "" -}}
+{{- end -}}
 {{- end }}
 
 {{/*
@@ -123,9 +127,10 @@ Backups access modes
 {{- .Values.persistence.backups.accessModes -}}
 {{- else -}}
 {{- $backupType := .Values.persistence.backups.backupType -}}
-{{- $specific := ternary .Values.persistence.backups.objectStorage.accessModes .Values.persistence.backups.volumeStorage.accessModes (eq $backupType "objectStorage") -}}
-{{- if gt (len $specific) 0 -}}
-{{- $specific -}}
+{{- if eq $backupType "objectStorage" -}}
+{{- .Values.persistence.backups.objectStorage.accessModes | default (list "ReadWriteMany") -}}
+{{- else if eq $backupType "volumeStorage" -}}
+{{- .Values.persistence.backups.volumeStorage.accessModes | default (list "ReadWriteOnce") -}}
 {{- else -}}
 {{- .Values.global.accessModes | default (list "ReadWriteOnce") -}}
 {{- end -}}

@@ -23,7 +23,7 @@ spec:
       everest.io/obs-volume-type: {{ .Values.persistence.backups.objectStorage.obsVolumeType }}
       everest.io/region: {{ .Values.persistence.backups.objectStorage.region }}
     nodePublishSecretRef:
-      name: {{ .Values.persistence.backups.objectStorage.accessKeySecretKeySecretName }}
+      name: {{ .Values.persistence.backups.objectStorage.accessKeySecretName }}
       namespace: {{ .Release.Namespace }}
   persistentVolumeReclaimPolicy: {{ .Values.persistence.backups.objectStorage.persistentVolumeReclaimPolicy }}
   {{- if $storageClass }}
@@ -46,7 +46,7 @@ metadata:
     csi.storage.k8s.io/fstype: {{ .Values.persistence.backups.objectStorage.fsType }}
     everest.io/obs-volume-type: {{ .Values.persistence.backups.objectStorage.obsVolumeType }}
     csi.storage.k8s.io/node-publish-secret-namespace: {{ .Release.Namespace }}
-    csi.storage.k8s.io/node-publish-secret-name: {{ .Values.persistence.backups.objectStorage.accessKeySecretKeySecretName }}
+    csi.storage.k8s.io/node-publish-secret-name: {{ .Values.persistence.backups.objectStorage.accessKeySecretName }}
 spec:
   volumeName: {{ .Values.persistence.backups.name }}
   {{- if $storageClass }}
