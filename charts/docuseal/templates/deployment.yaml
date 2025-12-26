@@ -27,11 +27,6 @@ spec:
         - name: {{ .Values.persistence.data.name }}
           persistentVolumeClaim:
             claimName: {{ .Values.persistence.data.name }}
-        - name: {{ .Values.config.name }}
-          projected:
-            sources:
-              - configMap:
-                  name: {{ .Values.config.name }}
       {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -41,27 +36,6 @@ spec:
       {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      initContainers:
-        - name: init-{{ include "docuseal.fullname" . }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          volumeMounts:
-            - name: {{ .Values.persistence.data.name }}
-              mountPath: /data/docuseal
-          {{- with .Values.initContainerResources }}
-          resources:
-            {{- if or ((index . "limits" | default dict).cpu | default false) ((index . "limits" | default dict).memory | default false) }}
-            limits:
-              {{- toYaml .limits | nindent 14 }}
-            {{- end }}
-            {{- if or ((index . "requests" | default dict).cpu | default false) ((index . "requests" | default dict).memory | default false) }}
-            requests:
-              {{- toYaml .requests | nindent 14 }}
-            {{- end }}
-          {{- end }}
-          args: ["configure", "--base-url={{ .Values.config.baseUrl }}"]
       containers:
         - name: {{ include "docuseal.fullname" . }}
           securityContext:
