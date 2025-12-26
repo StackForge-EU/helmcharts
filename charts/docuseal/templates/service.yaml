@@ -5,10 +5,10 @@ metadata:
   name: {{ .Values.service.name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "youtrack.labels" . | nindent 4 }}
+    {{- include "docuseal.labels" . | nindent 4 }}
 spec:
   selector:
-    {{- include "youtrack.selectorLabels" . | nindent 4 }}
+    {{- include "docuseal.selectorLabels" . | nindent 4 }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.name }}

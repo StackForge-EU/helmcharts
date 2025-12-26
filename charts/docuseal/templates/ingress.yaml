@@ -5,7 +5,7 @@ metadata:
   name: {{ .Values.ingress.name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "youtrack.labels" . | nindent 4 }}
+    {{- include "docuseal.labels" . | nindent 4 }}
   annotations:
     {{- range $key, $value := .Values.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
@@ -23,7 +23,7 @@ spec:
                 port:
                   number: {{ .Values.service.port }}
   tls:
-    - secretName: {{ include "youtrack.fullname" . }}-letsencrypt-cert
+    - secretName: {{ include "docuseal.fullname" . }}-letsencrypt-cert
       hosts:
         - {{ .Values.config.baseUrl | trimPrefix "https://" | trimPrefix "http://" }}
 {{- end }}

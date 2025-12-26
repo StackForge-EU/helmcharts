@@ -4,15 +4,15 @@ metadata:
   name: {{ .Values.persistence.data.name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "youtrack.labels" . | nindent 4 }}
+    {{- include "docuseal.labels" . | nindent 4 }}
   annotations:
     everest.io/disk-volume-type: {{ .Values.persistence.data.storageType }}
 spec:
-  {{- $storageClass := include "youtrack.data.storageClass" . }}
+  {{- $storageClass := include "docuseal.data.storageClass" . }}
   {{- if $storageClass }}
   storageClassName: {{ $storageClass }}
   {{- end }}
-  accessModes: {{ include "youtrack.data.accessModes" . }}
+  accessModes: {{ include "docuseal.data.accessModes" . }}
   resources:
     requests:
       storage: {{ .Values.persistence.data.storageSize }}
