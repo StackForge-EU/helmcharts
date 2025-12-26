@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "youtrack.fullname" . }}
+  name: {{ include "docuseal.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "youtrack.labels" . | nindent 4 }}
+    {{- include "docuseal.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.deployment.replicas }}
   strategy:
     type: {{ .Values.deployment.strategyType }}
   selector:
     matchLabels:
-      {{- include "youtrack.selectorLabels" . | nindent 6 }}
+      {{- include "docuseal.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "youtrack.selectorLabels" . | nindent 8 }}
+        {{- include "docuseal.selectorLabels" . | nindent 8 }}
       {{- if .Values.podAnnotations }}
       annotations:
         {{- with .Values.podAnnotations }}
@@ -42,7 +42,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
-        - name: init-{{ include "youtrack.fullname" . }}
+        - name: init-{{ include "docuseal.fullname" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           securityContext:
@@ -63,7 +63,7 @@ spec:
           {{- end }}
           args: ["configure", "--base-url={{ .Values.config.baseUrl }}"]
       containers:
-        - name: {{ include "youtrack.fullname" . }}
+        - name: {{ include "docuseal.fullname" . }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -74,6 +74,12 @@ spec:
               name: {{ .Values.service.name }}
               protocol: {{ .Values.service.protocol }}
           {{- end }}
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.postgres.name }}-app
+                  key: uri
           volumeMounts:
             - name:  {{ .Values.persistence.data.name }}
               mountPath: /data/docuseal
