@@ -70,7 +70,7 @@ postgres:
   instances: 1
   major: 18
   storage:
-    size: 4GiB
+    size: 4Gi
     storageClass: ""
   enablePodMonitor: true
 

@@ -2,7 +2,7 @@ apiVersion: v2
 name: docuseal
 description: A Helm chart for deploying Docuseal with Cloud native Postgres on Kubernetes
 type: application
-version: 1.0.3
+version: 1.0.4
 
 keywords:
   - docuseal
