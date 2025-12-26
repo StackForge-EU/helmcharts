@@ -10,7 +10,7 @@ deployment:
 global:
   storageClass: ""
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
 
 # Secrets for pulling images from a private container registry
 imagePullSecrets: []
@@ -58,7 +58,8 @@ persistence:
     storageClassName: ""
     storageType: SSD
     storageSize: 50Gi
-    accessModes: []
+    accessModes:
+      - ReadWriteMany
 
 # Configure your Docuseal
 config:
