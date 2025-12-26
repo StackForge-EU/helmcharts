@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "docuseal.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "docuseal.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  strategy:
+    type: {{ .Values.deployment.strategyType }}
+  selector:
+    matchLabels:
+      {{- include "docuseal.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "docuseal.selectorLabels" . | nindent 8 }}
+      {{- if .Values.podAnnotations }}
+      annotations:
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec:
+      volumes:
+        - name: {{ .Values.persistence.data.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.data.name }}
+        - name: {{ .Values.config.name }}
+          projected:
+            sources:
+              - configMap:
+                  name: {{ .Values.config.name }}
+      {{- with .Values.volumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: init-{{ include "docuseal.fullname" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          volumeMounts:
+            - name: {{ .Values.persistence.data.name }}
+              mountPath: /data/docuseal
+          {{- with .Values.initContainerResources }}
+          resources:
+            {{- if or ((index . "limits" | default dict).cpu | default false) ((index . "limits" | default dict).memory | default false) }}
+            limits:
+              {{- toYaml .limits | nindent 14 }}
+            {{- end }}
+            {{- if or ((index . "requests" | default dict).cpu | default false) ((index . "requests" | default dict).memory | default false) }}
+            requests:
+              {{- toYaml .requests | nindent 14 }}
+            {{- end }}
+          {{- end }}
+          args: ["configure", "--base-url={{ .Values.config.baseUrl }}"]
+      containers:
+        - name: {{ include "docuseal.fullname" . }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.service.enabled }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+              name: {{ .Values.service.name }}
+              protocol: {{ .Values.service.protocol }}
+          {{- end }}
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.postgres.name }}-app
+                  key: uri
+          volumeMounts:
+            - name:  {{ .Values.persistence.data.name }}
+              mountPath: /data/docuseal
+          {{- with .Values.volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- if or ((index . "limits" | default dict).cpu | default false) ((index . "limits" | default dict).memory | default false) }}
+            limits:
+              {{- toYaml .limits | nindent 14 }}
+            {{- end }}
+            {{- if or ((index . "requests" | default dict).cpu | default false) ((index . "requests" | default dict).memory | default false) }}
+            requests:
+              {{- toYaml .requests | nindent 14 }}
+            {{- end }}
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

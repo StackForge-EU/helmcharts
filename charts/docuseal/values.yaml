@@ -1,0 +1,113 @@
+image:
+  repository: docuseal/docuseal
+  pullPolicy: IfNotPresent
+  tag: 2.2.7
+
+deployment:
+  strategyType: RollingUpdate
+  replicas: 1
+
+global:
+  storageClass: ""
+  accessModes:
+    - ReadWriteMany
+
+# Secrets for pulling images from a private container registry
+imagePullSecrets: []
+
+# Security context applied at the pod level
+podSecurityContext:
+  fsGroup: 13001
+
+# Security context for containers
+securityContext:
+  runAsNonRoot: true
+  runAsGroup: 13001
+  runAsUser: 13001
+  privileged: false
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false # <- need to be false otherwise error
+  capabilities:
+    drop:
+      - ALL
+  seccompProfile:
+    type: RuntimeDefault
+
+# Define resource requests and limits for the init container
+initContainerResources:
+  requests:
+    cpu: 300m
+    memory: 1536Mi
+  limits:
+#    cpu: 300m
+#    memory: 2000Mi
+
+# Define resource requests and limits for the main container
+resources:
+  requests:
+    cpu: 300m
+    memory: 1536Mi
+  limits:
+#     cpu: 300m
+#     memory: 4Gi
+
+# Configure your volumes
+persistence:
+  data:
+    name: docuseal-data
+    storageClassName: ""
+    storageType: SSD
+    storageSize: 50Gi
+    accessModes:
+      - ReadWriteMany
+
+postgres:
+  name: docuseal-postgres
+  instances: 1
+  major: 18
+  storage:
+    size: 4GiB
+    storageClass: ""
+  enablePodMonitor: true
+
+# Service definition
+service:
+  enabled: true
+  name: http
+  port: 3000
+  protocol: TCP
+
+# Ingress definition
+ingress:
+  enabled: true
+  name: docuseal-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    kubernetes.io/tls-acme: "true"
+    # cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # active the annotation below if ipWhitelist.enabled is set to true
+    # traefik.ingress.kubernetes.io/router.middlewares: ip-whitelist@kubernetescrd
+
+# Use this to restrict access to Docuseal to specific IP addresses
+ipWhitelist:
+  enabled: false
+  name: ip-whitelist # when setting to true add the name to the ingress annotations under router.middlewares section
+  sourceRange:
+    - XXX.XXX.XXX.XXX/XX # specify your allowed IP's ranges here
+
+# Enable or disable whitelisting for Traefik and Cert-Manager components
+networkPolicyWhitelist:
+  traefik:
+    enabled: false
+  cert-manager:
+    enabled: false
+    port: 8089
+
+# Optional: Override names and configure pod scheduling preferences
+nameOverride: ""
+fullnameOverride: ""
+podAnnotations: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
