@@ -2,6 +2,28 @@ apiVersion: v1
 entries:
   docuseal:
   - apiVersion: v2
+    created: "2025-12-26T22:41:46.067789462Z"
+    description: A Helm chart for deploying Docuseal with Cloud native Postgres on
+      Kubernetes
+    digest: e505990ba9fc596db00bccbf79e1e287ae8fef736d9a4158dde859ec58681813
+    home: https://stack-forge.eu
+    keywords:
+    - docuseal
+    - stackforge
+    - k8s
+    - kubernetes
+    maintainers:
+    - email: charts@stack-forge.cloud
+      name: StackForge
+      url: https://stack-forge.eu
+    name: docuseal
+    sources:
+    - https://github.com/StackForge-EU/helmcharts/tree/main/charts/docuseal
+    type: application
+    urls:
+    - https://github.com/StackForge-EU/helmcharts/releases/download/docuseal-1.0.4/docuseal-1.0.4.tgz
+    version: 1.0.4
+  - apiVersion: v2
     created: "2025-12-26T22:37:29.118911224Z"
     description: A Helm chart for deploying Docuseal with Cloud native Postgres on
       Kubernetes
@@ -138,4 +160,4 @@ entries:
     urls:
     - https://github.com/StackForge-EU/helmcharts/releases/download/youtrack-1.0.12/youtrack-1.0.12.tgz
     version: 1.0.12
-generated: "2025-12-26T22:37:29.118933356Z"
+generated: "2025-12-26T22:41:46.067818166Z"
