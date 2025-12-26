@@ -61,6 +61,10 @@ persistence:
     accessModes:
       - ReadWriteMany
 
+# Configure your Docuseal
+config:
+  baseUrl: "https://docuseal.example.com" # ⚠️ NEED TO BE SET, rest is optional
+
 postgres:
   name: docuseal-postgres
   instances: 1
