@@ -9,6 +9,7 @@ A collection of Helm charts for deploying applications on Kubernetes.
 ## Charts
 
 - [**youtrack**](./charts/youtrack/README.md) - JetBrains YouTrack issue tracking platform
+- [**documenso**](./charts/documenso/README.md) - Documenso, the open-source DocuSign alternative
 
 ## Installation
 

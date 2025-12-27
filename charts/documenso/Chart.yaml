@@ -3,6 +3,7 @@ name: documenso
 description: A Helm chart for deploying Documenso with Cloud native Postgres on Kubernetes
 type: application
 version: 1.0.13
+appVersion: "v2.3.1"
 
 keywords:
   - documenso
