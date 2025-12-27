@@ -54,9 +54,19 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.postgres.name }}-app
                   key: uri
+          envFrom:
+          {{- if .Values.secret.create }}
+            - secretRef:
+                name: {{ include "documenso.fullname" . }}-secret
+          {{- end }}
+          {{- if .Values.existingSecret }}
+            - secretRef:
+                name: {{ .Values.existingSecret }}
+          {{- end }}
+
           volumeMounts:
             - name:  {{ .Values.persistence.data.name }}
-              mountPath: /data/documenso
+              mountPath: /opt/documenso
           {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
