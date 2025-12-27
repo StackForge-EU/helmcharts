@@ -7,7 +7,7 @@ metadata:
     {{- include "documenso.labels" . | nindent 4 }}
   annotations:
     everest.io/disk-volume-type: {{ .Values.persistence.data.storageType }}
-    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "0"
 spec:
   {{- $storageClass := include "documenso.data.storageClass" . }}
