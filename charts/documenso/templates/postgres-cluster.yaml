@@ -1,3 +1,4 @@
+{{- if .Values.postgres.create }}
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
@@ -15,3 +16,4 @@ spec:
     storageClass: {{ .Values.postgres.storage.storageClass }}
   monitoring:
     enablePodMonitor: {{ .Values.postgres.enablePodMonitor }}
+{{- end }}

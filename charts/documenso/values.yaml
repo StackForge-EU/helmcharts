@@ -118,6 +118,7 @@ secret:
   DOCUMENSO_DISABLE_TELEMETRY: "true"
 
 postgres:
+  create: true
   name: documenso-postgres
   instances: 1
   major: 18
