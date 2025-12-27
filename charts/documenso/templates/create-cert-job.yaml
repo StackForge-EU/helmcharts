@@ -19,7 +19,8 @@ spec:
       containers:
         - name: cert-gen
           image: alpine/openssl:3.5.4
-          command: |
+          command: 
+          - |
             sh -c "
             openssl req -newkey rsa:4096 -keyout myKey.pem -out myCSR.csr -nodes -subj "/CN=${DOMAIN}"
             openssl x509 -signkey myKey.pem -in myCSR.csr -req -days 365 -out cert.pem
