@@ -60,6 +60,11 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.postgres.name }}-app
                   key: uri
+            - name: NEXT_PRIVATE_DIRECT_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.postgres.name }}-app
+                  key: uri
           envFrom:
           {{- if .Values.secret.create }}
             - secretRef:
