@@ -42,7 +42,7 @@ spec:
           envFrom:
           {{- if .Values.secret.create }}
             - secretRef:
-                name: {{ include "documenso.fullname" . }}-secret
+                name: {{ include "documenso.fullname" . }}-secret-keys
           {{- end }}
           {{- if .Values.existingSecret }}
             - secretRef:
