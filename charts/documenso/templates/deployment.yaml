@@ -55,6 +55,8 @@ spec:
               value: "{{ .Values.config.documentSizeLimit }}"
             - name: NEXT_PUBLIC_DISABLE_SIGNUP
               value: "{{ .Values.config.disableSignup }}"
+            - name: NEXT_PRIVATE_BROWSERLESS_URL
+              value: "ws://{{ .Values.browserless.service.name }}"
             - name: NEXT_PRIVATE_DATABASE_URL
               valueFrom:
                 secretKeyRef:

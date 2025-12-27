@@ -7,6 +7,19 @@ deployment:
   strategyType: RollingUpdate
   replicas: 1
 
+browserless:
+  strategyType: RollingUpdate
+  replicas: 1
+  image:
+    repository: ghcr.io/browserless/chrome
+    pullPolicy: IfNotPresent
+    tag: 1.61.1-puppeteer-21.4.1
+  service:
+    enabled: true
+    name: cdp
+    port: 3000
+    protocol: TCP
+
 global:
   storageClass: ""
   accessModes:
