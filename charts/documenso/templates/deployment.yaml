@@ -49,7 +49,13 @@ spec:
               protocol: {{ .Values.service.protocol }}
           {{- end }}
           env:
-            - name: DATABASE_URL
+            - name: NEXT_PUBLIC_WEBAPP_URL
+              value: {{ .Values.config.baseUrl }}
+            - name: NEXT_PUBLIC_DOCUMENT_SIZE_UPLOAD_LIMIT
+              value: {{ .Values.config.documentSizeLimit }}
+            - name: NEXT_PUBLIC_DISABLE_SIGNUP
+              value: {{ .Values.config.disableSignup }}
+            - name: NEXT_PRIVATE_DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.postgres.name }}-app
