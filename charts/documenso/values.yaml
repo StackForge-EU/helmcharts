@@ -69,7 +69,7 @@ config:
 
 existingSecret: "" # if you have an existing secret, put its name here.
 secret:
-  create: true
+  createKeys: true
   # If creating a new secret, you can set the following values.
   # If using an existing secret, make sure it contains these keys.
   # if they are not set, helm will create one with random Values
@@ -78,6 +78,7 @@ secret:
   NEXT_PRIVATE_ENCRYPTION_SECONDARY_KEY: ""
   NEXT_PRIVATE_SIGNING_PASSPHRASE: ""
 
+  create: true
   # Set these values according to your needs
   NEXT_PRIVATE_GOOGLE_CLIENT_ID: ""
   NEXT_PRIVATE_GOOGLE_CLIENT_SECRET: ""
