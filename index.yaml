@@ -2,6 +2,28 @@ apiVersion: v1
 entries:
   documenso:
   - apiVersion: v2
+    created: "2025-12-27T12:44:40.541500738Z"
+    description: A Helm chart for deploying Documenso with Cloud native Postgres on
+      Kubernetes
+    digest: 9cc5e3d51d97390a934c8cc29c9f7c749e280ae652b9fe6dd605fc1c90201791
+    home: https://stack-forge.eu
+    keywords:
+    - documenso
+    - stackforge
+    - k8s
+    - kubernetes
+    maintainers:
+    - email: charts@stack-forge.cloud
+      name: StackForge
+      url: https://stack-forge.eu
+    name: documenso
+    sources:
+    - https://github.com/StackForge-EU/helmcharts/tree/main/charts/documenso
+    type: application
+    urls:
+    - https://github.com/StackForge-EU/helmcharts/releases/download/documenso-1.0.5/documenso-1.0.5.tgz
+    version: 1.0.5
+  - apiVersion: v2
     created: "2025-12-27T12:41:59.024690086Z"
     description: A Helm chart for deploying Documenso with Cloud native Postgres on
       Kubernetes
@@ -271,4 +293,4 @@ entries:
     urls:
     - https://github.com/StackForge-EU/helmcharts/releases/download/youtrack-1.0.12/youtrack-1.0.12.tgz
     version: 1.0.12
-generated: "2025-12-27T12:41:59.024721485Z"
+generated: "2025-12-27T12:44:40.541535292Z"
