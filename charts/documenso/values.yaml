@@ -1,0 +1,165 @@
+image:
+  repository: documenso/documenso
+  pullPolicy: IfNotPresent
+  tag: v2.3.1
+
+deployment:
+  strategyType: RollingUpdate
+  replicas: 1
+
+global:
+  storageClass: ""
+  accessModes:
+    - ReadWriteMany
+
+# Secrets for pulling images from a private container registry
+imagePullSecrets: []
+
+# Security context applied at the pod level
+podSecurityContext:
+  fsGroup: 13001
+
+# Security context for containers
+securityContext:
+  runAsNonRoot: true
+  runAsGroup: 13001
+  runAsUser: 13001
+  privileged: false
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false # <- need to be false otherwise error
+  capabilities:
+    drop:
+      - ALL
+  seccompProfile:
+    type: RuntimeDefault
+
+# Define resource requests and limits for the init container
+initContainerResources:
+  requests:
+    cpu: 300m
+    memory: 1536Mi
+  limits:
+#    cpu: 300m
+#    memory: 2000Mi
+
+# Define resource requests and limits for the main container
+resources:
+  requests:
+    cpu: 300m
+    memory: 1536Mi
+  limits:
+#     cpu: 300m
+#     memory: 4Gi
+
+# Configure your volumes
+persistence:
+  data:
+    name: documenso-data
+    storageClassName: ""
+    storageType: SSD
+    storageSize: 1Gi
+    accessModes:
+      - ReadWriteMany
+
+# Configure your documenso
+config:
+  baseUrl: "https://documenso.example.com" # ⚠️ NEED TO BE SET, rest is optional
+  documentSizeLimit: 5 # NEXT_PUBLIC_DOCUMENT_SIZE_UPLOAD_LIMIT
+  disableSignup: false # NEXT_PUBLIC_DISABLE_SIGNUP
+
+existingSecret: "" # if you have an existing secret, put its name here.
+secret:
+  create: true
+  # If creating a new secret, you can set the following values.
+  # If using an existing secret, make sure it contains these keys.
+  # if they are not set, helm will create one with random Values
+  NEXTAUTH_SECRET: ""
+  NEXT_PRIVATE_ENCRYPTION_KEY: ""
+  NEXT_PRIVATE_ENCRYPTION_SECONDARY_KEY: ""
+  NEXT_PRIVATE_SIGNING_PASSPHRASE: ""
+
+  # Set these values according to your needs
+  NEXT_PRIVATE_GOOGLE_CLIENT_ID: ""
+  NEXT_PRIVATE_GOOGLE_CLIENT_SECRET: ""
+  NEXT_PRIVATE_INTERNAL_WEBAPP_URL: ""
+  NEXT_PRIVATE_DATABASE_URL: ""
+  NEXT_PRIVATE_DIRECT_DATABASE_URL: ""
+  NEXT_PUBLIC_UPLOAD_TRANSPORT: ""
+  NEXT_PRIVATE_UPLOAD_ENDPOINT: ""
+  NEXT_PRIVATE_UPLOAD_FORCE_PATH_STYLE: ""
+  NEXT_PRIVATE_UPLOAD_REGION: ""
+  NEXT_PRIVATE_UPLOAD_BUCKET: ""
+  NEXT_PRIVATE_UPLOAD_ACCESS_KEY_ID: ""
+  NEXT_PRIVATE_UPLOAD_SECRET_ACCESS_KEY: ""
+  NEXT_PRIVATE_SMTP_TRANSPORT: "smtp-auth"
+  NEXT_PRIVATE_SMTP_HOST: ""
+  NEXT_PRIVATE_SMTP_PORT: ""
+  NEXT_PRIVATE_SMTP_USERNAME: ""
+  NEXT_PRIVATE_SMTP_PASSWORD: ""
+  NEXT_PRIVATE_SMTP_APIKEY_USER: ""
+  NEXT_PRIVATE_SMTP_APIKEY: ""
+  NEXT_PRIVATE_SMTP_SECURE: ""
+  NEXT_PRIVATE_SMTP_UNSAFE_IGNORE_TLS: ""
+  NEXT_PRIVATE_SMTP_FROM_NAME: "Documenso"
+  NEXT_PRIVATE_SMTP_FROM_ADDRESS: "documentso@localhost"
+  NEXT_PRIVATE_SMTP_SERVICE: ""
+  NEXT_PRIVATE_RESEND_API_KEY: ""
+  NEXT_PRIVATE_MAILCHANNELS_API_KEY: ""
+  NEXT_PRIVATE_MAILCHANNELS_ENDPOINT: ""
+  NEXT_PRIVATE_MAILCHANNELS_DKIM_DOMAIN: ""
+  NEXT_PRIVATE_MAILCHANNELS_DKIM_SELECTOR: ""
+  NEXT_PRIVATE_MAILCHANNELS_DKIM_PRIVATE_KEY: ""
+  NEXT_PUBLIC_POSTHOG_KEY: ""
+  NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH: ""
+  NEXT_PUBLIC_USE_INTERNAL_URL_BROWSERLESS: ""
+
+postgres:
+  name: documenso-postgres
+  instances: 1
+  major: 18
+  storage:
+    size: 4Gi
+    storageClass: ""
+  enablePodMonitor: true
+
+# Service definition
+service:
+  enabled: true
+  name: http
+  port: 3000
+  protocol: TCP
+
+# Ingress definition
+ingress:
+  enabled: true
+  name: documenso-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    kubernetes.io/tls-acme: "true"
+    # cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # active the annotation below if ipWhitelist.enabled is set to true
+    # traefik.ingress.kubernetes.io/router.middlewares: ip-whitelist@kubernetescrd
+
+# Use this to restrict access to documenso to specific IP addresses
+ipWhitelist:
+  enabled: false
+  name: ip-whitelist # when setting to true add the name to the ingress annotations under router.middlewares section
+  sourceRange:
+    - XXX.XXX.XXX.XXX/XX # specify your allowed IP's ranges here
+
+# Enable or disable whitelisting for Traefik and Cert-Manager components
+networkPolicyWhitelist:
+  traefik:
+    enabled: false
+  cert-manager:
+    enabled: false
+    port: 8089
+
+# Optional: Override names and configure pod scheduling preferences
+nameOverride: ""
+fullnameOverride: ""
+podAnnotations: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

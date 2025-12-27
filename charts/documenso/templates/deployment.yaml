@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "documenso.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "documenso.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  strategy:
+    type: {{ .Values.deployment.strategyType }}
+  selector:
+    matchLabels:
+      {{- include "documenso.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "documenso.selectorLabels" . | nindent 8 }}
+      {{- if .Values.podAnnotations }}
+      annotations:
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec:
+      volumes:
+        - name: {{ .Values.persistence.data.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.data.name }}
+      {{- with .Values.volumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ include "documenso.fullname" . }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.service.enabled }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+              name: {{ .Values.service.name }}
+              protocol: {{ .Values.service.protocol }}
+          {{- end }}
+          env:
+            - name: NEXT_PUBLIC_WEBAPP_URL
+              value: {{ .Values.config.baseUrl }}
+            - name: NEXT_PUBLIC_DOCUMENT_SIZE_UPLOAD_LIMIT
+              value: {{ .Values.config.documentSizeLimit }}
+            - name: NEXT_PUBLIC_DISABLE_SIGNUP
+              value: {{ .Values.config.disableSignup }}
+            - name: NEXT_PRIVATE_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.postgres.name }}-app
+                  key: uri
+          envFrom:
+          {{- if .Values.secret.create }}
+            - secretRef:
+                name: {{ include "documenso.fullname" . }}-secret
+          {{- end }}
+          {{- if .Values.existingSecret }}
+            - secretRef:
+                name: {{ .Values.existingSecret }}
+          {{- end }}
+
+          volumeMounts:
+            - name:  {{ .Values.persistence.data.name }}
+              mountPath: /opt/documenso
+          {{- with .Values.volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- if or ((index . "limits" | default dict).cpu | default false) ((index . "limits" | default dict).memory | default false) }}
+            limits:
+              {{- toYaml .limits | nindent 14 }}
+            {{- end }}
+            {{- if or ((index . "requests" | default dict).cpu | default false) ((index . "requests" | default dict).memory | default false) }}
+            requests:
+              {{- toYaml .requests | nindent 14 }}
+            {{- end }}
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

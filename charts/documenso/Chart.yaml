@@ -1,0 +1,21 @@
+apiVersion: v2
+name: documenso
+description: A Helm chart for deploying Documenso with Cloud native Postgres on Kubernetes
+type: application
+version: 1.0.0
+
+keywords:
+  - documenso
+  - stackforge
+  - k8s
+  - kubernetes
+
+maintainers:
+  - name: StackForge
+    url: https://stack-forge.eu
+    email: charts@stack-forge.cloud
+
+home: https://stack-forge.eu
+
+sources:
+  - https://github.com/StackForge-EU/helmcharts/tree/main/charts/documenso
