@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: {{ include "documenso.fullname" . }}-create-cert
   annotations:
-    "helm.sh/hook": post-install
+    "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "10"
 spec:
   ttlSecondsAfterFinished: 100
