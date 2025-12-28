@@ -6,9 +6,6 @@ metadata:
   labels:
     {{- include "ghostcms.labels" . | nindent 4 }}
 spec:
-  rootPasswordSecretKeyRef:
-    name: {{ if .Values.mariadb.existingSecret }}{{ .Values.mariadb.existingSecret }}{{ else }}{{ include "ghostcms.fullname" . }}-mariadb{{ end }}
-    key: rootPassword
   database: {{ .Values.mariadb.database | quote }}
   username: {{ .Values.mariadb.username | quote }}
   passwordSecretKeyRef:
