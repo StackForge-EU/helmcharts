@@ -94,12 +94,13 @@ ghost:
 mariadb:
   enabled: true
   existingSecret: ""
-  rootPassword: "changeme"
+  rootPassword: ""
   database: "ghost"
   username: "ghost"
-  password: "changeme"
+  password: ""
   storage:
     size: 1Gi
+    # storageClass: ""
   replicas: 1
   galera:
     enabled: false

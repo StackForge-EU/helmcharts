@@ -28,31 +28,34 @@ helm uninstall my-ghost
 
 The following table lists the configurable parameters of the GhostCMS chart and their default values.
 
-| Parameter                             | Description                                      | Default                 |
-| ------------------------------------- | ------------------------------------------------ | ----------------------- |
-| `replicaCount`                        | Number of replicas                               | `1`                     |
-| `image.repository`                    | Ghost image repository                           | `ghost`                 |
-| `image.tag`                           | Ghost image tag                                  | `alpine`                |
-| `ghost.url`                           | Ghost URL                                        | `http://ghostcms.local` |
-| `mariadb.enabled`                     | Enable managed MariaDB                           | `true`                  |
-| `mariadb.existingSecret`              | Name of existing secret for passwords            | `""`                    |
-| `mariadb.database`                    | MariaDB database name                            | `ghost`                 |
-| `mariadb.username`                    | MariaDB username                                 | `ghost`                 |
-| `mariadb.password`                    | MariaDB password (leave empty for auto-generate) | `changeme`              |
-| `mariadb.storage.size`                | MariaDB storage size                             | `1Gi`                   |
-| `mariadb.replicas`                    | MariaDB replicas                                 | `1`                     |
-| `mariadb.galera.enabled`              | Enable Galera                                    | `false`                 |
-| `externalDatabase.enabled`            | Use external database                            | `false`                 |
-| `externalDatabase.host`               | External database host                           | `""`                    |
-| `externalDatabase.database`           | External database name                           | `""`                    |
-| `externalDatabase.username`           | External database username                       | `""`                    |
-| `externalDatabase.passwordSecretName` | Secret name for external DB password             | `""`                    |
-| `externalDatabase.passwordSecretKey`  | Key in secret for password                       | `password`              |
-| `persistence.size`                    | PVC size for Ghost content                       | `1Gi`                   |
-| `service.type`                        | Service type                                     | `ClusterIP`             |
-| `service.port`                        | Service port                                     | `2368`                  |
-| `ingress.enabled`                     | Enable ingress                                   | `false`                 |
-| `ingress.hosts[0].host`               | Ingress host                                     | `ghostcms.local`        |
+| Parameter                             | Description                                           | Default                 |
+| ------------------------------------- | ----------------------------------------------------- | ----------------------- |
+| `replicaCount`                        | Number of replicas                                    | `1`                     |
+| `image.repository`                    | Ghost image repository                                | `ghost`                 |
+| `image.tag`                           | Ghost image tag                                       | `alpine`                |
+| `ghost.url`                           | Ghost URL                                             | `http://ghostcms.local` |
+| `mariadb.enabled`                     | Enable managed MariaDB                                | `true`                  |
+| `mariadb.existingSecret`              | Name of existing secret for passwords                 | `""`                    |
+| `mariadb.rootPassword`                | MariaDB root password (leave empty for auto-generate) | `""`                    |
+| `mariadb.database`                    | MariaDB database name                                 | `ghost`                 |
+| `mariadb.username`                    | MariaDB username                                      | `ghost`                 |
+| `mariadb.password`                    | MariaDB user password (leave empty for auto-generate) | `""`                    |
+| `mariadb.storage.size`                | MariaDB storage size                                  | `1Gi`                   |
+| `mariadb.storage.storageClass`        | MariaDB storage class                                 | `""`                    |
+| `mariadb.replicas`                    | MariaDB replicas                                      | `1`                     |
+| `mariadb.galera.enabled`              | Enable Galera                                         | `false`                 |
+| `externalDatabase.enabled`            | Use external database                                 | `false`                 |
+| `externalDatabase.host`               | External database host                                | `""`                    |
+| `externalDatabase.database`           | External database name                                | `""`                    |
+| `externalDatabase.username`           | External database username                            | `""`                    |
+| `externalDatabase.passwordSecretName` | Secret name for external DB password                  | `""`                    |
+| `externalDatabase.passwordSecretKey`  | Key in secret for password                            | `password`              |
+| `persistence.size`                    | PVC size for Ghost content                            | `1Gi`                   |
+| `persistence.storageClass`            | Storage class for Ghost content PVC                   | `""`                    |
+| `service.type`                        | Service type                                          | `ClusterIP`             |
+| `service.port`                        | Service port                                          | `2368`                  |
+| `ingress.enabled`                     | Enable ingress                                        | `false`                 |
+| `ingress.hosts[0].host`               | Ingress host                                          | `ghostcms.local`        |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 
@@ -77,7 +80,7 @@ Ensure the secret exists in the same namespace with the password.
 
 ## Using Existing Secrets
 
-To use an existing secret for the managed MariaDB passwords, set `mariadb.existingSecret` to the name of your secret. The secret must contain a `password` key.
+To use an existing secret for the managed MariaDB passwords, set `mariadb.existingSecret` to the name of your secret. The secret must contain `rootPassword` and `password` keys.
 
 ```yaml
 mariadb:
@@ -86,4 +89,4 @@ mariadb:
 
 ## Password Generation
 
-If `mariadb.password` is left empty, a random 16-character password will be generated automatically at install time.
+If `mariadb.rootPassword` or `mariadb.password` are left empty, random 16-character passwords will be generated automatically at install time for the respective fields.
