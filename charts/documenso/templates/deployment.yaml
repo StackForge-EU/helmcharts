@@ -56,7 +56,7 @@ spec:
             - name: NEXT_PUBLIC_DISABLE_SIGNUP
               value: "{{ .Values.config.disableSignup }}"
             - name: NEXT_PRIVATE_BROWSERLESS_URL
-              value: "ws://{{ .Values.browserless.service.name }}:{{ .Values.browserless.service.port }}"
+              value: "ws://{{ .Values.browserless.service.name }}:{{ .Values.browserless.service.port }}{{ .Values.browserless.endpoint }}"
             - name: NEXT_PRIVATE_DATABASE_URL
               valueFrom:
                 secretKeyRef:
