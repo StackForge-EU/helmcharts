@@ -13,7 +13,7 @@ browserless:
   image:
     repository: ghcr.io/browserless/chrome
     pullPolicy: IfNotPresent
-    tag: 1.61.1-puppeteer-21.4.1
+    tag: v2.38.2
   service:
     enabled: true
     name: cdp
