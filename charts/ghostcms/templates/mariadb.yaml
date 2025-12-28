@@ -1,0 +1,22 @@
+{{- if .Values.mariadb.enabled }}
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: MariaDB
+metadata:
+  name: {{ include "ghostcms.fullname" . }}-mariadb
+  labels:
+    {{- include "ghostcms.labels" . | nindent 4 }}
+spec:
+  rootPasswordSecretKeyRef:
+    name: {{ if .Values.mariadb.existingSecret }}{{ .Values.mariadb.existingSecret }}{{ else }}{{ include "ghostcms.fullname" . }}-mariadb{{ end }}
+    key: password
+  database: {{ .Values.mariadb.database | quote }}
+  username: {{ .Values.mariadb.username | quote }}
+  passwordSecretKeyRef:
+    name: {{ if .Values.mariadb.existingSecret }}{{ .Values.mariadb.existingSecret }}{{ else }}{{ include "ghostcms.fullname" . }}-mariadb{{ end }}
+    key: password
+  storage:
+    size: {{ .Values.mariadb.storage.size }}
+  replicas: {{ .Values.mariadb.replicas }}
+  galera:
+    enabled: {{ .Values.mariadb.galera.enabled }}
+{{- end }}

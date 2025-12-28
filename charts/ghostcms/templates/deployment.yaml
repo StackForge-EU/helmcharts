@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ghostcms.fullname" . }}
+  labels:
+    {{- include "ghostcms.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "ghostcms.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "ghostcms.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ghostcms.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: ghost
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 2368
+              protocol: TCP
+          env:
+            - name: database__client
+              value: mysql
+            - name: database__connection__host
+              value: {{ if .Values.mariadb.enabled }}{{ include "ghostcms.fullname" . }}-mariadb{{ else }}{{ .Values.externalDatabase.host }}{{ end }}
+            - name: database__connection__user
+              value: {{ if .Values.mariadb.enabled }}{{ .Values.mariadb.username | quote }}{{ else }}{{ .Values.externalDatabase.username | quote }}{{ end }}
+            - name: database__connection__password
+              valueFrom:
+                secretKeyRef:
+                  name: {{ if .Values.mariadb.enabled }}{{ if .Values.mariadb.existingSecret }}{{ .Values.mariadb.existingSecret }}{{ else }}{{ include "ghostcms.fullname" . }}-mariadb{{ end }}{{ else }}{{ .Values.externalDatabase.passwordSecretName }}{{ end }}
+                  key: {{ if .Values.mariadb.enabled }}password{{ else }}{{ .Values.externalDatabase.passwordSecretKey }}{{ end }}
+            - name: database__connection__database
+              value: {{ if .Values.mariadb.enabled }}{{ .Values.mariadb.database | quote }}{{ else }}{{ .Values.externalDatabase.database | quote }}{{ end }}
+            - name: url
+              value: {{ .Values.ghost.url | quote }}
+          volumeMounts:
+            - name: content
+              mountPath: /var/lib/ghost/content
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: content
+          persistentVolumeClaim:
+            claimName: {{ include "ghostcms.fullname" . }}-content
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
