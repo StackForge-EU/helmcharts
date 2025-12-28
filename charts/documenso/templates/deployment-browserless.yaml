@@ -36,7 +36,7 @@ spec:
       containers:
         - name: {{ include "documenso.fullname" . }}-browserless
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml .Values.browserless.securityContext | nindent 12 }}
           image: "{{ .Values.browserless.image.repository }}:{{ .Values.browserless.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.browserless.image.pullPolicy }}
           {{- if .Values.browserless.service.enabled }}

@@ -19,6 +19,18 @@ browserless:
     name: cdp
     port: 3000
     protocol: TCP
+  securityContext:
+    runAsNonRoot: true
+    runAsGroup: 999
+    runAsUser: 999
+    privileged: false
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false # <- need to be false otherwise error
+    capabilities:
+      drop:
+        - ALL
+    seccompProfile:
+      type: RuntimeDefault
 
 global:
   storageClass: ""
