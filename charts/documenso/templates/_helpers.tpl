@@ -49,6 +49,10 @@ Selector labels
 app.kubernetes.io/name: {{ include "documenso.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+{{- define "documenso.selectorLabelsBrowserless" -}}
+app.kubernetes.io/name: {{ include "documenso.name" . }}-browserless
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
 
 {{/*
 Data storage class

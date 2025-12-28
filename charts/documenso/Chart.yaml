@@ -2,7 +2,7 @@ apiVersion: v2
 name: documenso
 description: A Helm chart for deploying Documenso with Cloud native Postgres on Kubernetes
 type: application
-version: 1.0.19
+version: 1.0.20
 appVersion: "v2.3.1"
 
 keywords:

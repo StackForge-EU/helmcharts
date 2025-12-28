@@ -11,11 +11,11 @@ spec:
     type: {{ .Values.browserless.strategyType }}
   selector:
     matchLabels:
-      {{- include "documenso.selectorLabels" . | nindent 6 }}
+      {{- include "documenso.selectorLabelsBrowserless" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "documenso.selectorLabels" . | nindent 8 }}
+        {{- include "documenso.selectorLabelsBrowserless" . | nindent 8 }}
       {{- if .Values.podAnnotations }}
       annotations:
         {{- with .Values.podAnnotations }}
