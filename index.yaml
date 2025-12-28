@@ -650,6 +650,17 @@ entries:
     urls:
     - https://github.com/StackForge-EU/helmcharts/releases/download/docuseal-1.0.0/docuseal-1.0.0.tgz
     version: 1.0.0
+  ghostcms:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2025-12-28T21:18:58.06817167Z"
+    description: A Helm chart for GhostCMS with MariaDB using mariadb-operator
+    digest: 25b9e82811b0e6977bed02e4406efd722b0544e2acc0d58031ce6d29e7c4b576
+    name: ghostcms
+    type: application
+    urls:
+    - https://github.com/StackForge-EU/helmcharts/releases/download/ghostcms-0.1.1/ghostcms-0.1.1.tgz
+    version: 0.1.1
   youtrack:
   - apiVersion: v2
     created: "2025-10-13T17:28:08.979251849Z"
@@ -699,4 +710,4 @@ entries:
     urls:
     - https://github.com/StackForge-EU/helmcharts/releases/download/youtrack-1.0.12/youtrack-1.0.12.tgz
     version: 1.0.12
-generated: "2025-12-28T00:22:54.361991091Z"
+generated: "2025-12-28T21:18:58.068249355Z"
