@@ -6,7 +6,7 @@ metadata:
     {{- include "ghostcms.labels" . | nindent 4 }}
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: {{ .Values.persistence.size }}
