@@ -53,6 +53,7 @@ spec:
               value: {{ if .Values.mariadb.enabled }}{{ .Values.mariadb.database | quote }}{{ else }}{{ .Values.externalDatabase.database | quote }}{{ end }}
             - name: url
               value: {{ .Values.ghost.url | quote }}
+            {{- toYaml .Values.ghost.extraEnv | nindent 12 }}
           volumeMounts:
             - name: content
               mountPath: /var/lib/ghost/content

@@ -90,6 +90,7 @@ affinity: {}
 
 ghost:
   url: "http://ghostcms.local"
+  extraEnv: []
 
 mariadb:
   enabled: true
