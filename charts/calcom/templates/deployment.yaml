@@ -32,6 +32,15 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+          {{- if .Values.secret.create }}
+            - secretRef:
+                name: {{ include "documenso.fullname" . }}-secret-keys
+          {{- end }}
+          {{- if .Values.existingSecret }}
+            - secretRef:
+                name: {{ .Values.existingSecret }}
+          {{- end }}
           env:
             - name: NEXT_PUBLIC_APP_NAME
               value: {{ .Values.calcom.appName }}
@@ -58,13 +67,6 @@ spec:
                   name: {{ .Values.postgres.name }}-app
                   key: uri
             {{- $secretRef  := .Values.secretRef -}}
-            {{- range tuple "NEXTAUTH_SECRET" "CALENDSO_ENCRYPTION_KEY" }}
-            - name: {{ . }}
-              valueFrom:
-                secretKeyRef:
-                  key: {{ . }}
-                  name: {{ include "calcom.fullname" . }}-secret-keys
-            {{- end}}
             {{- range tuple
               "AB_TEST_BUCKET_PROBABILITY"
               "API_KEY_PREFIX"
