@@ -3,6 +3,36 @@ entries:
   calcom:
   - apiVersion: v2
     appVersion: v6.1.16
+    created: "2026-02-22T17:28:51.725406741Z"
+    description: Deploy Calcom in a Helm Chart
+    digest: 3ee5023a1efcb955ef44e1a8718abd69b1654229476d8954dc6629d017ae1afc
+    home: https://stackforge-eu.github.io/helmcharts
+    keywords:
+    - kubernetes
+    - chart
+    - schedule
+    - conference
+    - calendar
+    - visio
+    - helm
+    - meeting
+    - cal
+    - appointment
+    - calcom
+    maintainers:
+    - name: Pyrrha
+      url: https://github.com/Pyrrha/calcom-helm
+    - name: StackForge
+      url: https://github.com/StackForge-EU/helmcharts
+    name: calcom
+    sources:
+    - https://github.com/StackForge-EU/helmcharts
+    type: application
+    urls:
+    - https://github.com/StackForge-EU/helmcharts/releases/download/calcom-0.8.11/calcom-0.8.11.tgz
+    version: 0.8.11
+  - apiVersion: v2
+    appVersion: v6.1.16
     created: "2026-02-22T16:33:28.332804493Z"
     description: Deploy Calcom in a Helm Chart
     digest: 6e9c727642a44fbf953fdc004b399140a9156a30a05c3d50919192cae63f9916
@@ -894,4 +924,4 @@ entries:
     urls:
     - https://github.com/StackForge-EU/helmcharts/releases/download/youtrack-1.0.12/youtrack-1.0.12.tgz
     version: 1.0.12
-generated: "2026-02-22T16:33:28.332914959Z"
+generated: "2026-02-22T17:28:51.725474156Z"
