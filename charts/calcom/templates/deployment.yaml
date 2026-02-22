@@ -33,9 +33,9 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
-          {{- if .Values.secret.create }}
+          {{- if .Values.secret.createKeys }}
             - secretRef:
-                name: {{ include "documenso.fullname" . }}-secret-keys
+                name: {{ include "calcom.fullname" . }}-secret-keys
           {{- end }}
           {{- if .Values.existingSecret }}
             - secretRef:
