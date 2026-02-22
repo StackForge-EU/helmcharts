@@ -1,0 +1,26 @@
+apiVersion: v2
+name: calcom
+description: Deploy Calcom in a Helm Chart
+type: application
+version: 0.8.7
+appVersion: v6.1.16
+keywords:
+  - kubernetes
+  - chart
+  - schedule
+  - conference
+  - calendar
+  - visio
+  - helm
+  - meeting
+  - cal
+  - appointment
+  - calcom
+sources:
+  - https://github.com/StackForge-EU/helmcharts
+home: https://stackforge-eu.github.io/helmcharts
+maintainers:
+  - name: Pyrrha
+    url: https://github.com/Pyrrha/calcom-helm
+  - name: StackForge
+    url: https://github.com/StackForge-EU/helmcharts

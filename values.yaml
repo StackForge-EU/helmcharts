@@ -1,0 +1,16 @@
+image:
+  tag: v6.1.16
+resources:
+  requests:
+    cpu: 300m
+    memory: 512Mi
+  limits:
+    cpu: 800m
+    memory: 1Gi
+ingress:
+  enabled: true
+  hosts:
+    - host: cal.stack-forge.cloud
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
