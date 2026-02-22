@@ -55,7 +55,7 @@ spec:
             - name: NEXT_PUBLIC_WEBAPP_URL
               value: https://{{ .Values.calcom.host }}
             - name: CALCOM_TELEMETRY_DISABLED
-              value: {{ .Values.calcom.telemetryDisabled }}
+              value: {{ .Values.calcom.telemetryDisabled | quote }}
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
