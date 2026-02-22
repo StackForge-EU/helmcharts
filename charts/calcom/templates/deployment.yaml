@@ -49,7 +49,7 @@ spec:
             - name: NEXT_PUBLIC_WEBSITE_URL
               value: https://{{ .Values.calcom.websiteUrl | default .Values.calcom.host }}
             - name: ALLOWED_HOSTNAMES
-              value: "{{ .Values.calcom.host }}"
+              value: '"{{ .Values.calcom.host }}"'
             - name: CALCOM_LICENSE_KEY
               value: {{ .Values.calcom.licenseKey }}
             - name: NEXT_PUBLIC_WEBAPP_URL
