@@ -68,7 +68,6 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.postgres.name }}-app
                   key: uri
-            {{- $secretRef  := .Values.secretRef -}}
           ports:
             - name: http
               containerPort: 3000
