@@ -63,7 +63,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: {{ . }}
-                  name: {{ $secretRef }}
+                  name: {{ include "calcom.fullname" . }}-secret-keys
             {{- end}}
             {{- range tuple
               "AB_TEST_BUCKET_PROBABILITY"
