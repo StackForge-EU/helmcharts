@@ -22,7 +22,9 @@ calcom:
   appName: Cal.com
   companyName: ""
   # websiteUrl: https://www.example.org
-  host: cal.example.org
+  hostnames:
+    - cal.example.org
+  webappUrl: https://cal.example.org
   licenseKey: 00000000-0000-0000-0000-000000000000
   telemetryDisabled: true
 

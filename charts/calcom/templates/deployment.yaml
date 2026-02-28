@@ -47,13 +47,13 @@ spec:
             - name: NEXT_PUBLIC_COMPANY_NAME
               value: {{ .Values.calcom.companyName }}
             - name: NEXT_PUBLIC_WEBSITE_URL
-              value: https://{{ .Values.calcom.websiteUrl | default .Values.calcom.host }}
+              value: https://{{ trimPrefix "https://" (.Values.calcom.websiteUrl | default .Values.calcom.host) }}
             - name: ALLOWED_HOSTNAMES
-              value: '"{{ .Values.calcom.host }}"'
+              value: '"{{ join '", "' .Values.calcom.hostnames }}"'
             - name: CALCOM_LICENSE_KEY
               value: {{ .Values.calcom.licenseKey }}
             - name: NEXT_PUBLIC_WEBAPP_URL
-              value: https://{{ .Values.calcom.host }}
+              value: https://{{ trimPrefix "https://" (.Values.calcom.webappUrl | default .Values.calcom.host) }}
             - name: CALCOM_TELEMETRY_DISABLED
               value: {{ .Values.calcom.telemetryDisabled | quote }}
             - name: CALCOM_PRIVATE_API_ROUTE
