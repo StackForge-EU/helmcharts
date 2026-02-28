@@ -56,6 +56,8 @@ spec:
               value: https://{{ trimPrefix "https://" (.Values.calcom.webappUrl | default .Values.calcom.host) }}
             - name: CALCOM_TELEMETRY_DISABLED
               value: {{ .Values.calcom.telemetryDisabled | quote }}
+            - name: DO_NOT_TRACK
+              value: {{ .Values.calcom.telemetryDisabled | quote }}
             - name: CALCOM_PRIVATE_API_ROUTE
               value: {{ .Values.calcom.licenseApi | quote }}
             - name: DATABASE_URL
