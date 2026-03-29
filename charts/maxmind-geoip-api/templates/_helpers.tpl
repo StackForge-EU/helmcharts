@@ -60,3 +60,14 @@ Secret name for maxmind dbUrl
 {{- include "maxmind-geoip-api.fullname" . }}
 {{- end }}
 {{- end }}
+
+{{/*
+Secret name for geoipupdate config
+*/}}
+{{- define "maxmind-geoip-api.geoipupdate.secretName" -}}
+{{- if .Values.geoipupdate.existingSecret }}
+{{- .Values.geoipupdate.existingSecret }}
+{{- else }}
+{{- include "maxmind-geoip-api.fullname" . }}
+{{- end }}
+{{- end }}

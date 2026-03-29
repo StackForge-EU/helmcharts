@@ -7,7 +7,6 @@ replicaCount: 1
 
 # MaxMind database download URL
 # The API container downloads and auto-updates the database every 24 hours
-# Example: https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=YOUR_KEY&suffix=tar.gz
 maxmind:
   dbUrl: ""
   # Use an existing Secret instead of creating one.
@@ -22,6 +21,12 @@ service:
   port: 80
   # The container listens on port 80 by default
   containerPort: 80
+
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 128Mi
 
 networkPolicy:
   create: false
@@ -41,4 +46,24 @@ resources:
   requests:
     cpu: 50m
     memory: 64Mi
-  
+
+# Use the official MaxMind geoipupdate tool for database updates
+geoipupdate:
+  enabled: true
+  image:
+    repository: ghcr.io/maxmind/geoipupdate
+    tag: v7.1
+    pullPolicy: IfNotPresent
+  accountId: ""
+  licenseKey: ""
+  editionIds: "GeoLite2-City"
+  # Use an existing Secret instead of creating one.
+  # The secret must contain a key named GeoIP.conf.
+  existingSecret: ""
+  # Run an initial download Job before the deployment is ready
+  initJob: true
+  # Run periodic updates via CronJob
+  cronJob:
+    enabled: true
+    schedule: "0 0 * * 0"
+

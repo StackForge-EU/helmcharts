@@ -1,0 +1,43 @@
+{{- if and .Values.geoipupdate.enabled .Values.geoipupdate.cronJob.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "maxmind-geoip-api.fullname" . }}-update
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "maxmind-geoip-api.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.geoipupdate.cronJob.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "maxmind-geoip-api.selectorLabels" . | nindent 12 }}
+        spec:
+          restartPolicy: OnFailure
+          volumes:
+            - name: config
+              secret:
+                secretName: {{ include "maxmind-geoip-api.geoipupdate.secretName" . }}
+                items:
+                  - key: GeoIP.conf
+                    path: GeoIP.conf
+            - name: data
+              persistentVolumeClaim:
+                claimName: {{ include "maxmind-geoip-api.fullname" . }}-data
+          containers:
+            - name: geoip-updater
+              image: "{{ .Values.geoipupdate.image.repository }}:{{ .Values.geoipupdate.image.tag }}"
+              imagePullPolicy: {{ .Values.geoipupdate.image.pullPolicy }}
+              command:
+                - /bin/sh
+                - -c
+                - /usr/bin/geoipupdate -d /data -f /etc/geoip/GeoIP.conf
+              volumeMounts:
+                - name: config
+                  mountPath: /etc/geoip
+                  readOnly: true
+                - name: data
+                  mountPath: /data
+{{- end }}

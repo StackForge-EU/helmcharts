@@ -15,6 +15,12 @@ spec:
       labels:
         {{- include "maxmind-geoip-api.selectorLabels" . | nindent 8 }}
     spec:
+      {{- if .Values.persistence.enabled }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "maxmind-geoip-api.fullname" . }}-data
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -23,13 +29,18 @@ spec:
             - containerPort: {{ .Values.service.containerPort }}
               name: http
               protocol: TCP
-          {{- if or .Values.maxmind.dbUrl .Values.maxmind.existingSecret }}
+          {{- if and (not .Values.geoipupdate.enabled) (or .Values.maxmind.dbUrl .Values.maxmind.existingSecret) }}
           env:
             - name: MAXMIND_DB_URL
               valueFrom:
                 secretKeyRef:
                   name: {{ include "maxmind-geoip-api.secretName" . }}
                   key: {{ .Values.maxmind.existingSecretKey | default "MAXMIND_DB_URL" }}
+          {{- end }}
+          {{- if .Values.persistence.enabled }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
           {{- end }}
           livenessProbe:
             httpGet:
