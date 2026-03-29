@@ -112,6 +112,8 @@ GET http://<service>:3000/metadata
 
 This Helm chart is provided as a convenience for deploying the [MaxMind GeoIP API](https://github.com/stefansundin/maxmind-geoip-api). We are not responsible for the application itself. For any issues related to the application, please refer to the upstream repository.
 
+An Ingress resource is intentionally not included in this chart. The upstream API does not provide any authentication, so exposing it publicly could allow unrestricted access to your GeoIP data. If you need external access, configure an Ingress separately with appropriate authentication and access controls.
+
 ## Maintainers
 
 | Name | Email | URL |
