@@ -8,8 +8,12 @@ A collection of Helm charts for deploying applications on Kubernetes.
 
 ## Charts
 
-- [**youtrack**](./charts/youtrack/README.md) - JetBrains YouTrack issue tracking platform
+- [**calcom**](./charts/calcom/README.md) - Cal.com scheduling platform
 - [**documenso**](./charts/documenso/README.md) - Documenso, the open-source DocuSign alternative
+- [**docuseal**](./charts/docuseal/README.md) - DocuSeal, open-source document signing
+- [**ghostcms**](./charts/ghostcms/README.md) - Ghost CMS publishing platform
+- [**maxmind-geoip-api**](./charts/maxmind-geoip-api/README.md) - MaxMind GeoIP lookup API
+- [**youtrack**](./charts/youtrack/README.md) - JetBrains YouTrack issue tracking platform
 
 ## Installation
 
