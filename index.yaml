@@ -1268,6 +1268,24 @@ entries:
   maxmind-geoip-api:
   - apiVersion: v2
     appVersion: v1.1.0
+    created: "2026-03-29T13:26:23.560873953Z"
+    description: A Helm chart for deploying the MaxMind GeoIP API
+    digest: 9f565f43b7383bd3a9108bbbe77550c532e0fb28ac5521cb8074e805fcabe5b0
+    keywords:
+    - maxmind
+    - geoip
+    - api
+    maintainers:
+    - email: support@stack-forge.cloud
+      name: StackForge UG (haftungsbeschränkt)
+      url: https://stack-forge.eu
+    name: maxmind-geoip-api
+    type: application
+    urls:
+    - https://github.com/StackForge-EU/helmcharts/releases/download/maxmind-geoip-api-0.1.1/maxmind-geoip-api-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: v1.1.0
     created: "2026-03-29T13:03:47.181195386Z"
     description: A Helm chart for deploying the MaxMind GeoIP API
     digest: e71ff198e12a14253d956a822b087dbfc73b35184216bfe5eb4e3d536b99dd71
@@ -1333,4 +1351,4 @@ entries:
     urls:
     - https://github.com/StackForge-EU/helmcharts/releases/download/youtrack-1.0.12/youtrack-1.0.12.tgz
     version: 1.0.12
-generated: "2026-03-29T13:03:47.181307876Z"
+generated: "2026-03-29T13:26:23.561004536Z"
