@@ -51,7 +51,7 @@ helm install my-geoip ./charts/maxmind-geoip-api \
 | `geoipupdate.image.tag` | geoipupdate image tag | `v7.1` |
 | `geoipupdate.accountId` | MaxMind account ID | `""` |
 | `geoipupdate.licenseKey` | MaxMind license key for geoipupdate | `""` |
-| `geoipupdate.editionIds` | MaxMind edition IDs | `GeoLite2-City` |
+| `geoipupdate.editionId` | MaxMind edition ID | `GeoLite2-City` |
 | `geoipupdate.existingSecret` | Name of an existing Secret containing `GeoIP.conf` | `""` |
 | `geoipupdate.initJob` | Run initial download Job | `true` |
 | `geoipupdate.cronJob.enabled` | Enable CronJob for periodic updates | `true` |

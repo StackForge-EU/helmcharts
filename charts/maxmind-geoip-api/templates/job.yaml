@@ -37,7 +37,9 @@ spec:
           command:
             - /bin/sh
             - -c
-            - /usr/bin/geoipupdate -d /data -f /etc/geoip/GeoIP.conf
+            - |
+              /usr/bin/geoipupdate -d /data -f /etc/geoip/GeoIP.conf
+              mv /data/{{ .Values.geoipupdate.editionId }}.mmdb /data/database.mmdb
           volumeMounts:
             - name: config
               mountPath: /etc/geoip
