@@ -1,0 +1,14 @@
+apiVersion: v2
+name: maxmind-geoip-api
+version: 0.1.0
+type: application
+keywords:
+  - maxmind
+  - geoip
+  - api
+description: A Helm chart for deploying the MaxMind GeoIP API
+maintainers:
+  - name: StackForge UG (haftungsbeschränkt)
+    email: support@stack-forge.cloud
+    url: https://stack-forge.eu
+appVersion: v1.1.0

@@ -1,0 +1,18 @@
+{{- if .Values.service.create }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "maxmind-geoip-api.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "maxmind-geoip-api.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    {{- include "maxmind-geoip-api.selectorLabels" . | nindent 4 }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.containerPort }}
+      protocol: TCP
+      name: http
+{{- end }}

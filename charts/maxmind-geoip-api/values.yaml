@@ -1,0 +1,44 @@
+image:
+  repository: stefansundin/maxmind-geoip-api
+  tag: v1.1.0
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+# MaxMind database download URL
+# The API container downloads and auto-updates the database every 24 hours
+# Example: https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=YOUR_KEY&suffix=tar.gz
+maxmind:
+  dbUrl: ""
+  # Use an existing Secret instead of creating one.
+  # The secret must contain a key named MAXMIND_DB_URL (or the key specified in existingSecretKey).
+  existingSecret: ""
+  # Override the key in the existing Secret to read from.
+  existingSecretKey: "MAXMIND_DB_URL"
+
+service:
+  create: true
+  type: ClusterIP
+  port: 80
+  # The container listens on port 80 by default
+  containerPort: 80
+
+networkPolicy:
+  create: false
+  ingress:
+    limit: false
+    from:
+      - podSelector: {}
+  egress:
+    limit: false
+    to:
+      - podSelector: {}
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  

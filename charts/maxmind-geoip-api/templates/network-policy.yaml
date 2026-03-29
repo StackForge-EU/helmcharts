@@ -1,0 +1,30 @@
+{{- if .Values.networkPolicy.create }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "maxmind-geoip-api.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "maxmind-geoip-api.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "maxmind-geoip-api.selectorLabels" . | nindent 6 }}
+  policyTypes:
+    {{- if .Values.networkPolicy.ingress.limit }}
+    - Ingress
+    {{- end }}
+    {{- if .Values.networkPolicy.egress.limit }}
+    - Egress
+    {{- end }}
+  {{- if .Values.networkPolicy.ingress.limit }}
+  ingress:
+    - from:
+        {{- toYaml .Values.networkPolicy.ingress.from | nindent 8 }}
+  {{- end }}
+  {{- if .Values.networkPolicy.egress.limit }}
+  egress:
+    - to:
+        {{- toYaml .Values.networkPolicy.egress.to | nindent 8 }}
+  {{- end }}
+{{- end }}
