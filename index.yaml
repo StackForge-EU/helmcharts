@@ -544,6 +544,27 @@ entries:
   codimd:
   - apiVersion: v1
     appVersion: 2.5.1
+    created: "2026-04-29T10:42:00.48096401Z"
+    description: A CodiMD Helm chart for Kubernetes
+    digest: 19ec3d3f5014208620bec4b747450dde07126ee91af77e7cf1f1b37e05a88d50
+    icon: https://hackmd.io/favicon.png
+    keywords:
+    - codimd
+    - markdown
+    - collaboration
+    kubeVersion: '>=1.14.0'
+    maintainers:
+    - email: support@hackmd.io
+      name: HackMD Inc. Dev Team
+    name: codimd
+    sources:
+    - https://github.com/hackmdio/codimd
+    - https://github.com/hackmdio/codimd-helm
+    urls:
+    - https://github.com/StackForge-EU/helmcharts/releases/download/codimd-0.1.14/codimd-0.1.14.tgz
+    version: 0.1.14
+  - apiVersion: v1
+    appVersion: 2.5.1
     created: "2026-04-29T10:39:39.887701003Z"
     description: A CodiMD Helm chart for Kubernetes
     digest: 6076702904e56bfbd64b74d893c9def0e1ae9e7e826e381923d5b2d33a2bd4c9
@@ -1430,4 +1451,4 @@ entries:
     urls:
     - https://github.com/StackForge-EU/helmcharts/releases/download/youtrack-1.0.12/youtrack-1.0.12.tgz
     version: 1.0.12
-generated: "2026-04-29T10:39:39.887830225Z"
+generated: "2026-04-29T10:42:00.481066162Z"
