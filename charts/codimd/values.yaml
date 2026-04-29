@@ -15,40 +15,10 @@ image:
 #    - myRegistryKeySecretName
 
 ##
-## PostgreSQL chart configuration
-##
-## Reference: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
-##
-## If you want to use external database, just set postgresql.enabled to false
+## BYODB - Bring your own DB, use codimd.database
 ##
 postgresql:
-  enabled: true
-  volumePermissions:
-    enabled: true
-  postgresqlUsername: codimd
-  postgresqlPassword: changeme
-  postgresqlDatabase: codimd
-##
-## MariaDB chart configuration
-##
-## Reference: https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
-##
-## If you prefer MariaDB, we also supported.
-##
-mariadb:
   enabled: false
-  volumePermissions:
-    enabled: true
-  db:
-    user: codimd
-    password: changeme
-    name: codimd
-  master:
-    persistence:
-      enabled: true
-  replication:
-    enabled: false
-
 
 ##
 ## Kubernetes service
@@ -73,12 +43,11 @@ ingress:
   hosts:
     - host: chart-example.local
       paths:
-      - /
+        - /
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
-
 
 ##
 ## CodiMD application configuration
@@ -163,7 +132,7 @@ codimd:
   #      bucket:
   imageStorePersistentVolume:
     enabled: true
-    size: '10Gi'
+    size: "10Gi"
     storageClass: "-"
     accessModes:
       - ReadWriteOnce
@@ -180,35 +149,35 @@ codimd:
   ## about security setting
   ##
   security:
-    useCDN: 'false'
+    useCDN: "false"
     # session secret, please change this value
-    sessionSecret: 'changeit'
-    sessionLife: '1209600000'
+    sessionSecret: "changeit"
+    sessionLife: "1209600000"
     ## HSTS setting
-    hstsEnabled: 'true'
-    hstsMaxAge: '31536000'
-    hstsIncludeSubdomain: 'false'
-    hstsPreload: 'true'
+    hstsEnabled: "true"
+    hstsMaxAge: "31536000"
+    hstsIncludeSubdomain: "false"
+    hstsPreload: "true"
     ## CSP setting
-    cspEnabled: 'true'
+    cspEnabled: "true"
     # cspReportUri:
     ## setup allow origin
     # allowOrigin:
     ## use gravatar.com as user gravatar
-    allowGravatar: 'true'
+    allowGravatar: "true"
 
   ##
   ## for tooBusy block user when server event loop lag more than ? ms
   ##
-  responseMaxLag: '70'
+  responseMaxLag: "70"
 
   ##
   ## setting about note creation
   ##
   noteCreation:
-    freeUrlEnabled: 'false'
-    freeUrlForbiddenNoteIds: 'robots.txt,favicon.ico,api'
-    defaultPermission: 'editable'
+    freeUrlEnabled: "false"
+    freeUrlForbiddenNoteIds: "robots.txt,favicon.ico,api"
+    defaultPermission: "editable"
   ##
   ## setting about note permission
   ##
@@ -225,7 +194,7 @@ codimd:
   markdown:
     # plantUMLServer:
     useHardBreak: true
-    linkifyHeaderStyle: 'keep-case'
+    linkifyHeaderStyle: "keep-case"
 
   ##
   ## User Authentication Methods
