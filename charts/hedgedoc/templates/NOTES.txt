@@ -2,24 +2,24 @@ Thank you for installing {{ .Chart.Name }}
 
 Your release is named {{ .Release.Name }}.
 
-Browse https://hackmd.io/c/codimd-documentation to get more information about CodiMD.
+Browse https://hackmd.io/c/hedgedoc-documentation to get more information about hedgedoc.
 
-{{ if contains "changeit" .Values.codimd.security.sessionSecret }}
+{{ if contains "changeit" .Values.hedgedoc.security.sessionSecret }}
 ===============================================================================================
 
 Important:
 
-For the security reason, please consider change codimd.security.sessionSecret to random secret.
+For the security reason, please consider change hedgedoc.security.sessionSecret to random secret.
 
 ===============================================================================================
 {{ end }}
 {{ if contains "LoadBalancer" .Values.service.type }}
 NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-      Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "codimd.fullname" . }} '
+      Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "hedgedoc.fullname" . }} '
 {{ else if .Values.ingress.enabled }}
   {{ if .Values.ingress.tlsSecret }}
-  Your CodiMD is located in: https://{{ .Values.ingress.hostname }}/
+  Your hedgedoc is located in: https://{{ .Values.ingress.hostname }}/
   {{ else }}
-  Your CodiMD is located in: http://{{ .Values.ingress.hostname }}/
+  Your hedgedoc is located in: http://{{ .Values.ingress.hostname }}/
   {{ end }}
 {{ end }}

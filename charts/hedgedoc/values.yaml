@@ -1,4 +1,4 @@
-# Default values for codimd.
+# Default values for hedgedoc.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -7,15 +7,15 @@
 # fullnameOverride:
 
 image:
-  registry: "nabo.codimd.dev"
-  repository: "hackmdio/hackmd"
-  tag: "2.5.1"
+  registry: "quay.io"
+  repository: "hedgedoc/hedgedoc"
+  tag: "1.10.8"
   pullPolicy: IfNotPresent
   pullSecrets: []
 #    - myRegistryKeySecretName
 
 ##
-## BYODB - Bring your own DB, use codimd.database
+## BYODB - Bring your own DB, use hedgedoc.database
 ##
 postgresql:
   enabled: false
@@ -50,9 +50,9 @@ ingress:
   #      - chart-example.local
 
 ##
-## CodiMD application configuration
+## hedgedoc application configuration
 ##
-codimd:
+hedgedoc:
   ##
   ## Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -86,7 +86,7 @@ codimd:
   ## connection setting
   ##
   connection:
-    ## if you doesn't using ingress, you can setup domain for your CodiMD instances
+    ## if you doesn't using ingress, you can setup domain for your hedgedoc instances
     # domain:
     ## if you want to add port number on your url
     urlAddPort: false

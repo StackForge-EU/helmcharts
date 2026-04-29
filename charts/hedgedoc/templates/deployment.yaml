@@ -1,0 +1,182 @@
+apiVersion: {{ template "hedgedoc.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "hedgedoc.fullname" . }}
+  labels:
+    app.kubernetes.io/component: server
+    {{- include "hedgedoc.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    {{ if .Values.hedgedoc.imageStorePersistentVolume.enabled }}
+    type: Recreate
+    {{ else }}
+    {{/* Because of hedgedoc using socket.io as realtime server, if their has many instances may breaking note contents */}}
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    {{ end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: server
+      app.kubernetes.io/name: {{ include "hedgedoc.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      name: {{ template "hedgedoc.fullname" . }}
+      labels:
+        app.kubernetes.io/component: server
+        {{- include "hedgedoc.labels" . | nindent 8 }}
+      annotations:
+        checksum/db-secret: {{ include (print $.Template.BasePath "/db-secret.yaml") . | sha256sum | quote }}
+        checksum/auth-secret: {{ include (print $.Template.BasePath "/auth-secret.yaml") . | sha256sum | quote }}
+        {{ if .Values.hedgedoc.security.sessionSecret }}
+        checksum/session-secret: {{ include (print $.Template.BasePath "/session-secret.yaml") . | sha256sum | quote }}
+        {{ end }}
+        {{ if contains "true" (include "hedgedoc.needImageSecret" .) }}
+        checksum/session-secret: {{ include (print $.Template.BasePath "/image-upload-secret.yaml") . | sha256sum | quote }}
+        {{ end }}
+        {{ if .Values.hedgedoc.podAnnotations }}
+        {{ toYaml .Values.hedgedoc.podAnnotations | nindent 8 }}
+        {{ end }}
+    spec:
+      {{ if .Values.hedgedoc.securityContext }}
+      securityContext:
+        {{ toYaml .Values.hedgedoc.securityContext | nindent 8 }}
+      {{ end }}
+      {{ if .Values.hedgedoc.affinity }}
+      affinity:
+      {{ toYaml .Values.hedgedoc.affinity | nindent 8 }}
+      {{ end }}
+      {{ if .Values.hedgedoc.tolerations }}
+      tolerations:
+      {{ toYaml .Values.hedgedoc.tolerations | nindent 8 }}
+      {{ end }}
+      {{ if .Values.hedgedoc.nodeSelector }}
+      nodeSelector:
+      {{ toYaml .Values.hedgedoc.nodeSelector | nindent 8 }}
+      {{ end }}
+      {{ if .Values.image.pullSecrets }}
+      imagePullSecrets:
+        {{ toYaml .Values.image.pullSecrets | nindent 8 }}
+      {{end }}
+      containers:
+        - name: hedgedoc
+          image: {{ template "hedgedoc.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          env:
+            {{ if .Values.hedgedoc.connection.domain }}
+            - name: CMD_DOMAIN
+              value: {{ .Values.hedgedoc.connection.domain | quote }}
+            {{ end }}
+            - name: CMD_URL_ADDPORT
+              value: {{ .Values.hedgedoc.connection.urlAddPort | quote }}
+            - name: CMD_PROTOCOL_USESSL
+              value: {{ .Values.hedgedoc.connection.protocolUseSSL | quote }}
+            - name: CMD_USECDN
+              value: {{ .Values.hedgedoc.security.useCDN | quote }}
+            - name: CMD_DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "hedgedoc.shortName" . }}-db-secret
+                  key: connection
+            - name: CMD_SESSION_LIFE
+              value: {{ .Values.hedgedoc.security.sessionLife | quote }}
+            - name: CMD_HSTS_ENABLE
+              value: {{ .Values.hedgedoc.security.hstsEnabled | quote }}
+            - name: CMD_HSTS_MAX_AGE
+              value: {{ .Values.hedgedoc.security.hstsMaxAge | quote }}
+            - name: CMD_HSTS_INCLUDE_SUBDOMAINS
+              value: {{ .Values.hedgedoc.security.hstsIncludeSubdomain | quote }}
+            - name: CMD_HSTS_PRELOAD
+              value: {{ .Values.hedgedoc.security.hstsPreload | quote }}
+            - name: CMD_CSP_ENABLE
+              value: {{ .Values.hedgedoc.security.cspEnabled | quote }}
+            {{ if .Values.hedgedoc.security.cspReportUri }}
+            - name: CMD_CSP_REPORTURI
+              value: {{ .Values.hedgedoc.security.cspReportUri | quote }}
+            {{ end }}
+            {{ if .Values.hedgedoc.security.allowOrigin }}
+            - name: CMD_ALLOW_ORIGIN
+              value: {{ .Values.hedgedoc.security.allowOrigin | quote }}
+            {{ end }}
+            - name: CMD_ALLOW_GRAVATAR
+              value: {{ .Values.hedgedoc.security.allowGravatar | quote }}
+            - name: CMD_RESPONSE_MAX_LAG
+              value: {{ .Values.hedgedoc.responseMaxLag | quote }}
+            - name: CMD_IMAGE_UPLOAD_TYPE
+              value: {{ .Values.hedgedoc.imageUpload.storeType | quote }}
+            - name: CMD_ALLOW_FREEURL
+              value: {{ .Values.hedgedoc.noteCreation.freeUrlEnabled | quote }}
+            - name: CMD_FORBIDDEN_NOTE_IDS
+              value: {{ .Values.hedgedoc.noteCreation.freeUrlForbiddenNoteIds | quote }}
+            - name: CMD_DEFAULT_PERMISSION
+              value: {{ .Values.hedgedoc.noteCreation.defaultPermission | quote }}
+            - name: CMD_ALLOW_ANONYMOUS_EDITS
+              value: {{ .Values.hedgedoc.notePermission.allowAnonymousEdit | quote}}
+            - name: CMD_ALLOW_ANONYMOUS_VIEWS
+              value: {{ .Values.hedgedoc.notePermission.allowAnonymousView | quote}}
+            - name: CMD_ALLOW_PDF_EXPORT
+              value: {{ .Values.hedgedoc.allowPDFExport | quote }}
+            {{ if .Values.hedgedoc.markdown.plantUMLServer }}
+            - name: CMD_PLANTUML_SERVER
+              value: {{ .Values.hedgedoc.markdown.plantUMLServer }}
+            {{ end }}
+            - name: CMD_DEFAULT_USE_HARD_BREAK
+              value: {{ .Values.hedgedoc.markdown.useHardBreak | quote }}
+            - name: CMD_LINKIFY_HEADER_STYLE
+              value: {{ .Values.hedgedoc.markdown.linkifyHeaderStyle | quote }}
+            - name: CMD_AUTO_VERSION_CHECK
+              value: {{ .Values.hedgedoc.versionCheck | quote }}
+          {{ if .Values.hedgedoc.extraEnvironmentVariables }}
+            {{ range $key, $val := .Values.hedgedoc.extraEnvironmentVariables }}
+            - name: {{ $key | quote }}
+              value: {{ $val | quote }}
+            {{ end }}
+          {{ end }}
+          envFrom:
+            - secretRef:
+                name: {{ template "hedgedoc.shortName" . }}-auth-env
+            {{ if .Values.hedgedoc.security.sessionSecret }}
+            - secretRef:
+                name: {{ template "hedgedoc.shortName" . }}-session
+            {{ end }}
+            {{ if contains "true" (include "hedgedoc.needImageSecret" .) }}
+            - secretRef:
+                name: {{ template "hedgedoc.shortName" . }}-image-upload
+            {{ end  }}
+          ports:
+            - name: http
+              containerPort: 3000
+          {{ if .Values.hedgedoc.imageStorePersistentVolume.enabled }}
+          volumeMounts:
+            - mountPath: /home/hackmd/app/public/uploads
+              name: image-store
+          {{ end }}
+          readinessProbe:
+            httpGet:
+              port: 3000
+              path: /status
+            initialDelaySeconds: 3
+            failureThreshold: 2
+            successThreshold: 3
+            timeoutSeconds: 2
+            periodSeconds: 5
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /status
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 2
+      restartPolicy: Always
+      {{ if .Values.hedgedoc.imageStorePersistentVolume.enabled }}
+      volumes:
+        - name: image-store
+          persistentVolumeClaim:
+            claimName: {{ template "hedgedoc.fullname" . }}
+      {{ end }}

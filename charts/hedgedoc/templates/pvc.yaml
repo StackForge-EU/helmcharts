@@ -1,0 +1,19 @@
+{{ if .Values.hedgedoc.imageStorePersistentVolume.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ template "hedgedoc.fullname" . }}
+  labels:
+    app.kubernetes.io/component: pvc
+  {{- include "hedgedoc.labels" . | nindent 4}}
+spec:
+  accessModes:
+    {{ range .Values.hedgedoc.imageStorePersistentVolume.accessModes }}
+    - {{ . | quote }}
+    {{ end  }}
+  volumeMode: {{ .Values.hedgedoc.imageStorePersistentVolume.volumeMode }}
+  resources:
+    requests:
+      storage: {{ default "10G" .Values.hedgedoc.imageStorePersistentVolume.size | quote }}
+  {{- include "hedgedoc.storageClass" . | nindent 2 }}
+  {{ end }}
