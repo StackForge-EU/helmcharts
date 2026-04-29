@@ -266,6 +266,14 @@ hedgedoc:
         username:
         displayName:
         email:
+    oidc:
+      enabled: false
+      providerName:
+      issuer:
+      clientId:
+      secret:
+      theme: null
+      enableRegistration: true
     openID:
       enabled: false
     saml:
