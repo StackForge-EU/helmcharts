@@ -1374,6 +1374,28 @@ entries:
   hedgedoc:
   - apiVersion: v1
     appVersion: 1.10.8
+    created: "2026-04-30T11:27:04.638303662Z"
+    description: A HedgeDoc Helm chart for Kubernetes
+    digest: 9ddfb7f4f71b8dce2c8ebec1cede4c8f01f0d7c5decb9ebb89f7061603c07b71
+    icon: https://avatars.githubusercontent.com/u/67865462?s=200&v=4
+    keywords:
+    - hedgedoc
+    - markdown
+    - collaboration
+    kubeVersion: '>=1.22.0'
+    maintainers:
+    - email: support@stack-forge.cloud
+      name: StackForge UG (haftungsbeschränkt)
+      url: https://stack-forge.eu
+    name: hedgedoc
+    sources:
+    - https://github.com/hedgedoc/hedgedoc
+    - https://github.com/StackForge-EU/helmcharts
+    urls:
+    - https://github.com/StackForge-EU/helmcharts/releases/download/hedgedoc-0.0.3/hedgedoc-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v1
+    appVersion: 1.10.8
     created: "2026-04-29T11:26:47.490184674Z"
     description: A HedgeDoc Helm chart for Kubernetes
     digest: f40ea0d9ece3e74a5db887eb672018f05875d03ad2c595c6b372ae9b0c6269bf
@@ -1538,4 +1560,4 @@ entries:
     urls:
     - https://github.com/StackForge-EU/helmcharts/releases/download/youtrack-1.0.12/youtrack-1.0.12.tgz
     version: 1.0.12
-generated: "2026-04-29T11:26:47.490313324Z"
+generated: "2026-04-30T11:27:04.638443684Z"
