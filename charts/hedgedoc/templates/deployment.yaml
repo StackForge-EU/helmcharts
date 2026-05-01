@@ -111,6 +111,8 @@ spec:
               value: {{ .Values.hedgedoc.noteCreation.freeUrlEnabled | quote }}
             - name: CMD_FORBIDDEN_NOTE_IDS
               value: {{ .Values.hedgedoc.noteCreation.freeUrlForbiddenNoteIds | quote }}
+            - name: CMD_ENABLE_UPLOADS
+              value: {{ .Values.hedgedoc.security.enableUploads | quote }}
             - name: CMD_DEFAULT_PERMISSION
               value: {{ .Values.hedgedoc.noteCreation.defaultPermission | quote }}
             - name: CMD_ALLOW_ANONYMOUS_EDITS

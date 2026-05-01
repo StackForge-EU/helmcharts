@@ -165,6 +165,7 @@ hedgedoc:
     # allowOrigin:
     ## use gravatar.com as user gravatar
     allowGravatar: "true"
+    enableUploads: "registered"
 
   ##
   ## for tooBusy block user when server event loop lag more than ? ms
