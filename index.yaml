@@ -1533,6 +1533,41 @@ entries:
     urls:
     - https://github.com/StackForge-EU/helmcharts/releases/download/maxmind-geoip-api-0.1.0/maxmind-geoip-api-0.1.0.tgz
     version: 0.1.0
+  open-archiver:
+  - apiVersion: v2
+    appVersion: v0.5.0
+    created: "2026-06-09T18:10:50.632896055Z"
+    dependencies:
+    - condition: valkey.enabled
+      name: valkey
+      repository: https://valkey.io/valkey-helm/
+      version: 0.9.4
+    - condition: meilisearch.enabled
+      name: meilisearch
+      repository: https://meilisearch.github.io/meilisearch-kubernetes
+      version: 0.32.0
+    description: A Helm chart for deploying Open Archiver with Cloud native Postgres
+      on Kubernetes
+    digest: b78482df8df3cb27f7eb2fa5e072df9ee96865b9ff872dd06bdc57202e6289f3
+    home: https://stack-forge.eu
+    keywords:
+    - open-archiver
+    - email-archiving
+    - stackforge
+    - k8s
+    - kubernetes
+    maintainers:
+    - email: charts@stack-forge.cloud
+      name: StackForge
+      url: https://stack-forge.eu
+    name: open-archiver
+    sources:
+    - https://github.com/StackForge-EU/helmcharts/tree/main/charts/open-archiver
+    - https://github.com/LogicLabs-OU/OpenArchiver
+    type: application
+    urls:
+    - https://github.com/StackForge-EU/helmcharts/releases/download/open-archiver-0.1.0/open-archiver-0.1.0.tgz
+    version: 0.1.0
   youtrack:
   - apiVersion: v2
     created: "2025-10-13T17:28:08.979251849Z"
@@ -1582,4 +1617,4 @@ entries:
     urls:
     - https://github.com/StackForge-EU/helmcharts/releases/download/youtrack-1.0.12/youtrack-1.0.12.tgz
     version: 1.0.12
-generated: "2026-05-01T13:12:27.418073447Z"
+generated: "2026-06-09T18:10:50.633056624Z"
