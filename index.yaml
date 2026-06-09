@@ -1536,6 +1536,40 @@ entries:
   open-archiver:
   - apiVersion: v2
     appVersion: v0.5.0
+    created: "2026-06-09T20:16:35.402753666Z"
+    dependencies:
+    - condition: valkey.enabled
+      name: valkey
+      repository: https://valkey.io/valkey-helm/
+      version: 0.9.4
+    - condition: meilisearch.enabled
+      name: meilisearch
+      repository: https://meilisearch.github.io/meilisearch-kubernetes
+      version: 0.32.0
+    description: A Helm chart for deploying Open Archiver with Cloud native Postgres
+      on Kubernetes
+    digest: d5d817f8a13abbf1ad704fe7482cc5d3b84d060d7f4281661c36a81f62171207
+    home: https://stack-forge.eu
+    keywords:
+    - open-archiver
+    - email-archiving
+    - stackforge
+    - k8s
+    - kubernetes
+    maintainers:
+    - email: charts@stack-forge.cloud
+      name: StackForge
+      url: https://stack-forge.eu
+    name: open-archiver
+    sources:
+    - https://github.com/StackForge-EU/helmcharts/tree/main/charts/open-archiver
+    - https://github.com/LogicLabs-OU/OpenArchiver
+    type: application
+    urls:
+    - https://github.com/StackForge-EU/helmcharts/releases/download/open-archiver-0.1.2/open-archiver-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: v0.5.0
     created: "2026-06-09T20:03:20.067047923Z"
     dependencies:
     - condition: valkey.enabled
@@ -1651,4 +1685,4 @@ entries:
     urls:
     - https://github.com/StackForge-EU/helmcharts/releases/download/youtrack-1.0.12/youtrack-1.0.12.tgz
     version: 1.0.12
-generated: "2026-06-09T20:03:20.067218942Z"
+generated: "2026-06-09T20:16:35.402912062Z"
