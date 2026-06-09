@@ -1,0 +1,28 @@
+1. Open Archiver has been deployed to namespace: {{ .Release.Namespace }}
+
+2. Access the application:
+{{- if .Values.ingress.enabled }}
+   URL: {{ .Values.config.appUrl }}
+{{- else }}
+   Run the following to port-forward:
+   kubectl port-forward svc/{{ .Values.service.name }} {{ .Values.config.portFrontend }}:{{ .Values.service.port }} -n {{ .Release.Namespace }}
+   Then visit: http://localhost:{{ .Values.config.portFrontend }}
+{{- end }}
+
+3. Components deployed:
+   - Open Archiver (frontend + backend)
+{{- if .Values.postgres.create }}
+   - PostgreSQL (CloudNativePG operator)
+{{- end }}
+{{- if .Values.valkey.enabled }}
+   - Valkey (Redis-compatible cache/queue)
+{{- end }}
+{{- if .Values.meilisearch.enabled }}
+   - Meilisearch (search engine)
+{{- end }}
+{{- if .Values.tika.enabled }}
+   - Apache Tika (document extraction)
+{{- end }}
+
+4. Important: Make sure you have the CloudNativePG operator installed in your cluster
+   for the PostgreSQL database to be provisioned.

@@ -1,0 +1,34 @@
+apiVersion: v2
+name: open-archiver
+description: A Helm chart for deploying Open Archiver with Cloud native Postgres on Kubernetes
+type: application
+version: 0.1.0
+appVersion: "v0.5.0"
+
+keywords:
+  - open-archiver
+  - email-archiving
+  - stackforge
+  - k8s
+  - kubernetes
+
+maintainers:
+  - name: StackForge
+    url: https://stack-forge.eu
+    email: charts@stack-forge.cloud
+
+home: https://stack-forge.eu
+
+sources:
+  - https://github.com/StackForge-EU/helmcharts/tree/main/charts/open-archiver
+  - https://github.com/LogicLabs-OU/OpenArchiver
+
+dependencies:
+  - name: valkey
+    version: "0.9.4"
+    repository: https://valkey.io/valkey-helm/
+    condition: valkey.enabled
+  - name: meilisearch
+    version: "0.32.0"
+    repository: https://meilisearch.github.io/meilisearch-kubernetes
+    condition: meilisearch.enabled

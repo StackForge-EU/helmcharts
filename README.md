@@ -13,6 +13,7 @@ A collection of Helm charts for deploying applications on Kubernetes.
 - [**docuseal**](./charts/docuseal/README.md) - DocuSeal, open-source document signing
 - [**ghostcms**](./charts/ghostcms/README.md) - Ghost CMS publishing platform
 - [**maxmind-geoip-api**](./charts/maxmind-geoip-api/README.md) - MaxMind GeoIP lookup API
+- [**open-archiver**](./charts/open-archiver/README.md) - Open Archiver, open-source email archiving platform
 - [**youtrack**](./charts/youtrack/README.md) - JetBrains YouTrack issue tracking platform
 
 ## Installation

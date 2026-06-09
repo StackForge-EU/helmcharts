@@ -1,0 +1,227 @@
+image:
+  repository: logiclabshq/open-archiver
+  pullPolicy: IfNotPresent
+  tag: v0.5.0
+
+deployment:
+  strategyType: RollingUpdate
+  replicas: 1
+
+global:
+  storageClass: ""
+  accessModes:
+    - ReadWriteOnce
+
+# Secrets for pulling images from a private container registry
+imagePullSecrets: []
+
+# Security context applied at the pod level
+podSecurityContext: {}
+
+# Security context for containers
+securityContext:
+  privileged: false
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  capabilities:
+    drop:
+      - ALL
+  seccompProfile:
+    type: RuntimeDefault
+
+# Define resource requests and limits for the main container
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits: {}
+#    cpu: 1000m
+#    memory: 2Gi
+
+# Configure your volumes
+persistence:
+  data:
+    name: open-archiver-data
+    storageClassName: ""
+    storageSize: 10Gi
+    accessModes:
+      - ReadWriteOnce
+
+# -- Application Configuration --
+config:
+  appUrl: "https://open-archiver.example.com" # ⚠️ MUST BE SET
+  nodeEnv: "production"
+  portFrontend: 3000
+  portBackend: 4000
+  syncFrequency: "* * * * *"
+  allInclusiveArchive: false
+  ingestionWorkerConcurrency: 5
+  bodySizeLimit: "100M"
+
+  # Storage
+  storageType: "local" # 'local' or 's3'
+  storageLocalRootPath: "/var/data/open-archiver"
+
+  # S3 (only used if storageType is 's3')
+  storageS3Endpoint: ""
+  storageS3Bucket: ""
+  storageS3AccessKeyId: ""
+  storageS3SecretAccessKey: ""
+  storageS3Region: ""
+  storageS3ForcePathStyle: "false"
+
+  # Meilisearch
+  meiliHost: "" # auto-configured if meilisearch.enabled is true
+  meiliIndexingBatch: 500
+
+  # Redis/Valkey
+  redisHost: "" # auto-configured if valkey.enabled is true
+  redisPort: 6379
+  redisTlsEnabled: false
+
+  # Tika
+  tikaUrl: "" # auto-configured if tika.enabled is true
+
+  # Security
+  enableDeletion: false
+  rateLimitWindowMs: 60000
+  rateLimitMaxRequests: 100
+  jwtExpiresIn: "7d"
+
+  # Retention
+  retentionBatchSize: 1000
+
+  # SMTP Journaling (Enterprise)
+  smtpJournalingPort: 2525
+  smtpJournalingDomain: ""
+  journalQueueBackpressureThreshold: 10000
+  journalWorkerConcurrency: 3
+
+# -- Secrets --
+existingSecret: "" # if you have an existing secret, put its name here
+
+secret:
+  createKeys: true
+  # Auto-generated if left empty
+  jwtSecret: ""
+  encryptionKey: "" # 32-byte hex string for master encryption
+  storageEncryptionKey: "" # 32-byte hex string for file encryption at rest
+  redisPassword: "" # Valkey/Redis password (set in valkey.auth.aclUsers.default.password too)
+  meiliMasterKey: "" # Meilisearch master key
+
+# -- Valkey (official valkey-helm subchart) --
+# See https://github.com/valkey-io/valkey-helm for all options
+valkey:
+  enabled: true
+  replica:
+    enabled: false
+  auth:
+    enabled: true
+    aclUsers:
+      default:
+        permissions: "~* &* +@all"
+        password: "" # set a password or use usersExistingSecret
+  dataStorage:
+    enabled: true
+    requestedSize: "2Gi"
+    className: ""
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits: {}
+
+# -- Meilisearch (official subchart) --
+# See https://github.com/meilisearch/meilisearch-kubernetes for all options
+meilisearch:
+  enabled: true
+  image:
+    tag: "v1.38"
+  environment:
+    MEILI_ENV: production
+    MEILI_SCHEDULE_SNAPSHOT: "86400"
+  auth:
+    existingMasterKeySecret: "" # will be set via template if secret.createKeys is true
+  persistence:
+    enabled: true
+    size: 5Gi
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits: {}
+
+# -- Apache Tika --
+tika:
+  enabled: true
+  image:
+    repository: apache/tika
+    tag: "3.2.2.0-full"
+    pullPolicy: IfNotPresent
+  replicas: 1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits: {}
+  securityContext:
+    runAsNonRoot: false
+    privileged: false
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
+    capabilities:
+      drop:
+        - ALL
+    seccompProfile:
+      type: RuntimeDefault
+
+# -- PostgreSQL (CloudNativePG) --
+postgres:
+  create: true
+  name: open-archiver-postgres
+  imageCatalogName: postgresql
+  instances: 1
+  major: 18
+  storage:
+    size: 10Gi
+    storageClass: ""
+  enablePodMonitor: true
+
+# -- Service --
+service:
+  enabled: true
+  name: http
+  port: 3000
+  protocol: TCP
+
+# -- Ingress --
+ingress:
+  enabled: true
+  name: open-archiver-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+# -- IP Whitelist --
+ipWhitelist:
+  enabled: false
+  name: ip-whitelist
+  sourceRange:
+    - 0.0.0.0/0
+
+# -- Network Policy Whitelisting --
+networkPolicyWhitelist:
+  traefik:
+    enabled: false
+  cert-manager:
+    enabled: false
+    port: 8089
+
+# -- Pod scheduling --
+nameOverride: ""
+fullnameOverride: ""
+podAnnotations: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

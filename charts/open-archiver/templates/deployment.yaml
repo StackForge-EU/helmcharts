@@ -1,0 +1,177 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "open-archiver.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "open-archiver.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  strategy:
+    type: {{ .Values.deployment.strategyType }}
+  selector:
+    matchLabels:
+      {{- include "open-archiver.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "open-archiver.selectorLabels" . | nindent 8 }}
+      {{- if .Values.podAnnotations }}
+      annotations:
+        {{- toYaml .Values.podAnnotations | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: {{ .Values.persistence.data.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.data.name }}
+      containers:
+        - name: {{ include "open-archiver.fullname" . }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.service.enabled }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+              name: {{ .Values.service.name }}
+              protocol: {{ .Values.service.protocol }}
+          {{- end }}
+          env:
+            - name: NODE_ENV
+              value: {{ .Values.config.nodeEnv | quote }}
+            - name: PORT_FRONTEND
+              value: {{ .Values.config.portFrontend | quote }}
+            - name: PORT_BACKEND
+              value: {{ .Values.config.portBackend | quote }}
+            - name: APP_URL
+              value: {{ .Values.config.appUrl | quote }}
+            - name: ORIGIN
+              value: {{ .Values.config.appUrl | quote }}
+            - name: SYNC_FREQUENCY
+              value: {{ .Values.config.syncFrequency | quote }}
+            - name: ALL_INCLUSIVE_ARCHIVE
+              value: {{ .Values.config.allInclusiveArchive | quote }}
+            - name: INGESTION_WORKER_CONCURRENCY
+              value: {{ .Values.config.ingestionWorkerConcurrency | quote }}
+            - name: BODY_SIZE_LIMIT
+              value: {{ .Values.config.bodySizeLimit | quote }}
+            # Storage
+            - name: STORAGE_TYPE
+              value: {{ .Values.config.storageType | quote }}
+            - name: STORAGE_LOCAL_ROOT_PATH
+              value: {{ .Values.config.storageLocalRootPath | quote }}
+            {{- if eq .Values.config.storageType "s3" }}
+            - name: STORAGE_S3_ENDPOINT
+              value: {{ .Values.config.storageS3Endpoint | quote }}
+            - name: STORAGE_S3_BUCKET
+              value: {{ .Values.config.storageS3Bucket | quote }}
+            - name: STORAGE_S3_ACCESS_KEY_ID
+              value: {{ .Values.config.storageS3AccessKeyId | quote }}
+            - name: STORAGE_S3_SECRET_ACCESS_KEY
+              value: {{ .Values.config.storageS3SecretAccessKey | quote }}
+            - name: STORAGE_S3_REGION
+              value: {{ .Values.config.storageS3Region | quote }}
+            - name: STORAGE_S3_FORCE_PATH_STYLE
+              value: {{ .Values.config.storageS3ForcePathStyle | quote }}
+            {{- end }}
+            # Meilisearch
+            - name: MEILI_HOST
+              value: {{ include "open-archiver.meiliHost" . | quote }}
+            - name: MEILI_INDEXING_BATCH
+              value: {{ .Values.config.meiliIndexingBatch | quote }}
+            # Redis/Valkey
+            - name: REDIS_HOST
+              value: {{ include "open-archiver.valkeyHost" . | quote }}
+            - name: REDIS_PORT
+              value: {{ .Values.config.redisPort | quote }}
+            - name: REDIS_TLS_ENABLED
+              value: {{ .Values.config.redisTlsEnabled | quote }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "open-archiver.valkeySecretName" . }}
+                  key: REDIS_PASSWORD
+            # Meilisearch
+            - name: MEILI_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "open-archiver.fullname" . }}-secret-keys
+                  key: MEILI_MASTER_KEY
+            # Tika
+            {{- if .Values.tika.enabled }}
+            - name: TIKA_URL
+              value: {{ include "open-archiver.tikaUrl" . | quote }}
+            {{- end }}
+            # Security
+            - name: ENABLE_DELETION
+              value: {{ .Values.config.enableDeletion | quote }}
+            - name: RATE_LIMIT_WINDOW_MS
+              value: {{ .Values.config.rateLimitWindowMs | quote }}
+            - name: RATE_LIMIT_MAX_REQUESTS
+              value: {{ .Values.config.rateLimitMaxRequests | quote }}
+            - name: JWT_EXPIRES_IN
+              value: {{ .Values.config.jwtExpiresIn | quote }}
+            - name: RETENTION_BATCH_SIZE
+              value: {{ .Values.config.retentionBatchSize | quote }}
+            # SMTP Journaling
+            {{- if .Values.config.smtpJournalingDomain }}
+            - name: SMTP_JOURNALING_PORT
+              value: {{ .Values.config.smtpJournalingPort | quote }}
+            - name: SMTP_JOURNALING_DOMAIN
+              value: {{ .Values.config.smtpJournalingDomain | quote }}
+            - name: JOURNAL_QUEUE_BACKPRESSURE_THRESHOLD
+              value: {{ .Values.config.journalQueueBackpressureThreshold | quote }}
+            - name: JOURNAL_WORKER_CONCURRENCY
+              value: {{ .Values.config.journalWorkerConcurrency | quote }}
+            {{- end }}
+            # Database URL from CNPG secret
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.postgres.name }}-app
+                  key: uri
+          envFrom:
+            {{- if .Values.existingSecret }}
+            - secretRef:
+                name: {{ .Values.existingSecret }}
+            {{- else }}
+            - secretRef:
+                name: {{ include "open-archiver.fullname" . }}-secret
+            {{- end }}
+            {{- if .Values.secret.createKeys }}
+            - secretRef:
+                name: {{ include "open-archiver.fullname" . }}-secret-keys
+            {{- end }}
+          volumeMounts:
+            - name: {{ .Values.persistence.data.name }}
+              mountPath: {{ .Values.config.storageLocalRootPath }}
+          {{- with .Values.resources }}
+          resources:
+            {{- if or ((index . "limits" | default dict).cpu | default false) ((index . "limits" | default dict).memory | default false) }}
+            limits:
+              {{- toYaml .limits | nindent 14 }}
+            {{- end }}
+            {{- if or ((index . "requests" | default dict).cpu | default false) ((index . "requests" | default dict).memory | default false) }}
+            requests:
+              {{- toYaml .requests | nindent 14 }}
+            {{- end }}
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
