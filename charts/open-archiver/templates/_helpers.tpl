@@ -124,3 +124,31 @@ Resolve Meilisearch master key secret name
 {{- include "open-archiver.fullname" . }}-secret-keys
 {{- end -}}
 {{- end }}
+
+{{/*
+Validate that valkey.auth.usersExistingSecret matches the secret-keys secret name.
+Fails template rendering with an actionable error if misconfigured.
+*/}}
+{{- define "open-archiver.validateValkeySecret" -}}
+{{- if and .Values.valkey.enabled .Values.secret.createKeys -}}
+{{- $expected := printf "%s-secret-keys" (include "open-archiver.fullname" .) -}}
+{{- $actual := .Values.valkey.auth.usersExistingSecret | default "" -}}
+{{- if ne $actual $expected -}}
+{{- fail (printf "valkey.auth.usersExistingSecret must be set to %q (got %q). Set it in your values file or via --set valkey.auth.usersExistingSecret=%s" $expected $actual $expected) -}}
+{{- end -}}
+{{- end -}}
+{{- end }}
+
+{{/*
+Validate that meilisearch.auth.existingMasterKeySecret matches the secret-keys secret name.
+Fails template rendering with an actionable error if misconfigured.
+*/}}
+{{- define "open-archiver.validateMeiliSecret" -}}
+{{- if and (index .Values "meilisearch" "enabled") .Values.secret.createKeys -}}
+{{- $expected := printf "%s-secret-keys" (include "open-archiver.fullname" .) -}}
+{{- $actual := index .Values "meilisearch" "auth" "existingMasterKeySecret" | default "" -}}
+{{- if ne $actual $expected -}}
+{{- fail (printf "meilisearch.auth.existingMasterKeySecret must be set to %q (got %q). Set it in your values file or via --set meilisearch.auth.existingMasterKeySecret=%s" $expected $actual $expected) -}}
+{{- end -}}
+{{- end -}}
+{{- end }}

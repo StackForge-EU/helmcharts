@@ -1,3 +1,5 @@
+{{- include "open-archiver.validateValkeySecret" . -}}
+{{- include "open-archiver.validateMeiliSecret" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
