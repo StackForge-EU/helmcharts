@@ -1,7 +1,7 @@
 image:
   repository: jetbrains/youtrack
   pullPolicy: Always
-  tag: 2025.2.98781
+  tag: 2026.2.19562
 
 deployment:
   # change to RollingUpdate if you have ReadWriteMany access to your PVCs
