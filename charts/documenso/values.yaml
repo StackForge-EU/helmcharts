@@ -1,7 +1,7 @@
 image:
   repository: documenso/documenso
   pullPolicy: IfNotPresent
-  tag: v2.3.1
+  tag: v2.20.0
 
 deployment:
   strategyType: RollingUpdate
@@ -13,7 +13,7 @@ browserless:
   image:
     repository: ghcr.io/browserless/chrome
     pullPolicy: IfNotPresent
-    tag: v2.38.2
+    tag: v2.57.0
   endpoint: /chrome
   service:
     enabled: true

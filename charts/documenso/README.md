@@ -47,7 +47,7 @@ The following table lists the configurable parameters of the Documenso chart and
 | Key                | Description                                        | Default               |
 | ------------------ | -------------------------------------------------- | --------------------- |
 | `image.repository` | Documenso image repository                         | `documenso/documenso` |
-| `image.tag`        | Documenso image tag                                | `v2.3.1`              |
+| `image.tag`        | Documenso image tag                                | `v2.20.0`             |
 | `image.pullPolicy` | Image pull policy                                  | `IfNotPresent`        |
 | `imagePullSecrets` | Secrets for pulling images from a private registry | `[]`                  |
 | `nameOverride`     | Override the name of the chart                     | `""`                  |
