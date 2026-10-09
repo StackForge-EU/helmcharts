@@ -1,6 +1,6 @@
 image:
   repository: stefansundin/maxmind-geoip-api
-  tag: v1.1.0
+  tag: v1.3.0
   pullPolicy: IfNotPresent
 
 replicaCount: 1
@@ -52,7 +52,7 @@ geoipupdate:
   enabled: true
   image:
     repository: ghcr.io/maxmind/geoipupdate
-    tag: v7.1
+    tag: v8.0
     pullPolicy: IfNotPresent
   accountId: ""
   licenseKey: ""

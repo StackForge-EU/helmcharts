@@ -23,7 +23,7 @@ helm install my-geoip ./charts/maxmind-geoip-api \
 | Parameter | Description | Default |
 |-----------|-------------|---------|
 | `image.repository` | API container image | `stefansundin/maxmind-geoip-api` |
-| `image.tag` | Image tag | `v1.1.0` |
+| `image.tag` | Image tag | `v1.3.0` |
 | `image.pullPolicy` | Image pull policy | `IfNotPresent` |
 | `replicaCount` | Number of replicas | `1` |
 | `maxmind.dbUrl` | URL to download the MaxMind database | `""` |
@@ -48,7 +48,7 @@ helm install my-geoip ./charts/maxmind-geoip-api \
 | `resources.requests.memory` | Memory request | `64Mi` |
 | `geoipupdate.enabled` | Use geoipupdate for database updates | `true` |
 | `geoipupdate.image.repository` | geoipupdate image | `ghcr.io/maxmind/geoipupdate` |
-| `geoipupdate.image.tag` | geoipupdate image tag | `v7.1` |
+| `geoipupdate.image.tag` | geoipupdate image tag | `v8.0` |
 | `geoipupdate.accountId` | MaxMind account ID | `""` |
 | `geoipupdate.licenseKey` | MaxMind license key for geoipupdate | `""` |
 | `geoipupdate.editionId` | MaxMind edition ID | `GeoLite2-City` |

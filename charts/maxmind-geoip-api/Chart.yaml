@@ -1,6 +1,6 @@
 apiVersion: v2
 name: maxmind-geoip-api
-version: 1.0.0
+version: 1.0.1
 type: application
 keywords:
   - maxmind
@@ -11,4 +11,4 @@ maintainers:
   - name: StackForge UG (haftungsbeschränkt)
     email: support@stack-forge.cloud
     url: https://stack-forge.eu
-appVersion: v1.1.0
+appVersion: v1.3.0
