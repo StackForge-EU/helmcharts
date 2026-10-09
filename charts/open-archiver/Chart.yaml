@@ -2,8 +2,8 @@ apiVersion: v2
 name: open-archiver
 description: A Helm chart for deploying Open Archiver with Cloud native Postgres on Kubernetes
 type: application
-version: 0.1.3
-appVersion: "v0.5.0"
+version: 0.1.4
+appVersion: "v0.6.0"
 
 keywords:
   - open-archiver
@@ -25,10 +25,10 @@ sources:
 
 dependencies:
   - name: valkey
-    version: "0.9.4"
+    version: "0.12.0"
     repository: https://valkey.io/valkey-helm/
     condition: valkey.enabled
   - name: meilisearch
-    version: "0.32.0"
+    version: "0.40.0"
     repository: https://meilisearch.github.io/meilisearch-kubernetes
     condition: meilisearch.enabled

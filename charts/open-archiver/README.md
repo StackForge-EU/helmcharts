@@ -48,7 +48,7 @@ helm install open-archiver ./charts/open-archiver \
 | Parameter                           | Default                     | Description                       |
 | ----------------------------------- | --------------------------- | --------------------------------- |
 | `image.repository`                  | `logiclabshq/open-archiver` | Container image                   |
-| `image.tag`                         | `v0.5.0`                    | Image tag                         |
+| `image.tag`                         | `v0.6.0`                    | Image tag                         |
 | `config.nodeEnv`                    | `production`                | Node environment                  |
 | `config.syncFrequency`              | `* * * * *`                 | Email sync cron schedule          |
 | `config.ingestionWorkerConcurrency` | `5`                         | Concurrent ingestion workers      |
