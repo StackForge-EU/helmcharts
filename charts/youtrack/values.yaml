@@ -123,6 +123,9 @@ config:
   youtrackLincenseKey: "" # default is empty, can be added later via WebUI
   youtrackDumbMode: false # default is false
   youtrackAiPlatformConfigUrl: "" # default is empty
+  # Upgrade on start without the Configuration Wizard. Migrations then run unattended, so keep backups.
+  # https://www.jetbrains.com/help/youtrack/server/upgrade-with-docker-image.html
+  disableConfigurationWizardOnUpgrade: false # default is false
 
   # Environmental Parameters: https://www.jetbrains.com/help/youtrack/server/youtrack-java-start-parameters.html#environmental-parameters
   secureMode: disable # disable (default) or tls

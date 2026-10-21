@@ -61,6 +61,10 @@ data:
     -Djetbrains.youtrack.ai.platform.config.url={{ .Values.config.youtrackAiPlatformConfigUrl }}
     {{- end }}
 
+    {{- if .Values.config.disableConfigurationWizardOnUpgrade }}
+    -Ddisable.configuration.wizard.on.upgrade=true
+    {{- end }}
+
     {{- $url := .Values.config.baseUrl }}
     {{- if or (not $url) (eq $url "https://youtrack.example.com") }}
     {{- fail "⚠️ baseUrl must be set in values.yaml" }}
