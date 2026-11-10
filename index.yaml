@@ -1368,6 +1368,16 @@ entries:
   ghostcms:
   - apiVersion: v2
     appVersion: latest
+    created: "2026-11-10T18:37:29.385313821Z"
+    description: A Helm chart for GhostCMS with MariaDB using mariadb-operator
+    digest: 0ce6b3e799d909428faab565be032d3f680223fa9194367821b93df94ea4dae9
+    name: ghostcms
+    type: application
+    urls:
+    - https://github.com/StackForge-EU/helmcharts/releases/download/ghostcms-0.1.6/ghostcms-0.1.6.tgz
+    version: 0.1.6
+  - apiVersion: v2
+    appVersion: latest
     created: "2025-12-31T14:16:39.995694863Z"
     description: A Helm chart for GhostCMS with MariaDB using mariadb-operator
     digest: e581d0067c3b5cffa25cd04c17566bf04b248b4078ea8c65bed5ae1499e63a62
@@ -1886,4 +1896,4 @@ entries:
     urls:
     - https://github.com/StackForge-EU/helmcharts/releases/download/youtrack-1.0.12/youtrack-1.0.12.tgz
     version: 1.0.12
-generated: "2026-10-21T22:59:14.447140635Z"
+generated: "2026-11-10T18:37:29.385429535Z"
