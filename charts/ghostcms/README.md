@@ -56,6 +56,9 @@ The following table lists the configurable parameters of the GhostCMS chart and 
 | `service.port`                        | Service port                                          | `2368`                  |
 | `ingress.enabled`                     | Enable ingress                                        | `false`                 |
 | `ingress.hosts[0].host`               | Ingress host                                          | `ghostcms.local`        |
+| `startupProbe`                        | Startup probe (`null` disables it)                    | `/ghost/api/admin/site/`, 5 min budget |
+| `livenessProbe`                       | Liveness probe (`null` disables it)                   | `/ghost/api/admin/site/`, 5s timeout   |
+| `readinessProbe`                      | Readiness probe (`null` disables it)                  | `/ghost/api/admin/site/`, 5s timeout   |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 
