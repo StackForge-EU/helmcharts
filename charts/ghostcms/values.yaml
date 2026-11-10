@@ -69,6 +69,34 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
+# Probes hit the public site-info API instead of `/`: rendering the homepage can
+# take over a second (e.g. image-size lookups), which made the liveness probe
+# kill healthy pods. Set a probe to `null` to disable it.
+startupProbe:
+  httpGet:
+    path: /ghost/api/admin/site/
+    port: http
+  periodSeconds: 10
+  timeoutSeconds: 5
+  # Up to 5 minutes for boot and database migrations after an upgrade.
+  failureThreshold: 30
+
+livenessProbe:
+  httpGet:
+    path: /ghost/api/admin/site/
+    port: http
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+
+readinessProbe:
+  httpGet:
+    path: /ghost/api/admin/site/
+    port: http
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
 autoscaling:
   enabled: false
   minReplicas: 1
